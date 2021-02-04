@@ -1,5 +1,4 @@
-﻿using Inventor;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,41 +8,98 @@ namespace InventorWrapper.General
 {
     public static class UnitManager
     {
-        public static UnitTypes UnitTypes { get; set; } = UnitTypes.In;
+        public static LengthUnits LengthUnits { get; set; } = LengthUnits.In;
 
-        public static double UnitsToInventor(double value)
+        public static AngularUnits AngularUnits { get; set; } = AngularUnits.Degrees;
+
+        public static List<LengthUnits> MeasurementUnits
         {
-            switch (UnitTypes)
+            get
             {
-                case UnitTypes.In:
-                    return value * 2.54;
-                case UnitTypes.M:
-                    return value * 10;
-                case UnitTypes.MM:
-                    return value / 10;
-                default:
-                    return value;
+                return new List<LengthUnits> { LengthUnits.In, LengthUnits.M, LengthUnits.MM };
             }
         }
 
-        public static double UnitsFromInventor(double value)
+        public static List<AngularUnits> AngularMeasurementUnits
         {
-            switch (UnitTypes)
+            get
             {
-                case UnitTypes.In:
-                    return value / 2.54;
-                case UnitTypes.M:
-                    return value / 10;
-                case UnitTypes.MM:
-                    return value * 10;
+                return new List<AngularUnits> { AngularUnits.Degrees, AngularUnits.Radians };
+            }
+        }
+
+        public static double UnitsToInventor(double value, UnitTypes unitTypes = UnitTypes.Length)
+        {
+            switch (unitTypes)
+            {
+                case UnitTypes.Length:
+                    switch (LengthUnits)
+                    {
+                        case LengthUnits.In:
+                            return value * 2.54;
+                        case LengthUnits.M:
+                            return value * 10;
+                        case LengthUnits.MM:
+                            return value / 10;
+                        default:
+                            return value;
+                    }
+                case UnitTypes.Angular:
+                    switch (AngularUnits)
+                    {
+                        case AngularUnits.Degrees:
+                            return ConvertDegrees(value);
+                        default:
+                            return value;
+                    }
                 default:
                     return value;
             }
+
+            
+        }
+
+        public static double UnitsFromInventor(double value, UnitTypes unitTypes = UnitTypes.Length)
+        {
+            switch (unitTypes)
+            {
+                case UnitTypes.Length:
+                    switch (LengthUnits)
+                    {
+                        case LengthUnits.In:
+                            return value / 2.54;
+                        case LengthUnits.M:
+                            return value / 10;
+                        case LengthUnits.MM:
+                            return value * 10;
+                        default:
+                            return value;
+                    }
+                case UnitTypes.Angular:
+                    switch (AngularUnits)
+                    {
+                        case AngularUnits.Degrees:
+                            return ConvertRadians(value);
+                        default:
+                            return value;
+                    }
+                default:
+                    return value;
+            }
+
+            
         }
 
         public static double ConvertDegrees(double value)
         {
             double constant = Math.PI / 180;
+
+            return value * constant;
+        }
+
+        public static double ConvertRadians(double value)
+        {
+            double constant = 180 / Math.PI;
 
             return value * constant;
         }

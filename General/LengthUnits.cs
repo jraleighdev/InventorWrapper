@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.General
 {
-    public enum UnitTypes
+    public enum LengthUnits
     {
-        Length,
-        Text,
-        Unitless,
-        Angular,
+        In,
+        M,
+        MM
     }
 }

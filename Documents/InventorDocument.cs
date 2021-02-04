@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using InventorWrapper.Representation;
 
 namespace InventorWrapper.Documents
 {
@@ -21,6 +22,8 @@ namespace InventorWrapper.Documents
         public Document _document;
 
         private InventorParameters _parameters;
+
+        private InventorRepresentationManager _representationManager;
 
         private InventorProperties _properties;
 
@@ -59,6 +62,32 @@ namespace InventorWrapper.Documents
                 }
 
                 return _parameters;
+            }
+        }
+
+        public InventorRepresentationManager RepresentationManager
+        {
+            get
+            {
+                if (_representationManager == null)
+                {
+                    if (IsAssemblyDoc)
+                    {
+                        var adoc = _document as AssemblyDocument;
+
+                        _representationManager =
+                            new InventorRepresentationManager(adoc.ComponentDefinition.RepresentationsManager);
+                    }
+                    else if (IsPartDoc)
+                    {
+                        var pDoc = _document as PartDocument;
+
+                        _representationManager =
+                            new InventorRepresentationManager(pDoc.ComponentDefinition.RepresentationsManager);
+                    }
+                }
+
+                return _representationManager;
             }
         }
 

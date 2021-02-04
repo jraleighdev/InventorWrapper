@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.General
 {
-    public enum UnitTypes
+    public enum AngularUnits
     {
-        Length,
-        Text,
-        Unitless,
-        Angular,
+        Degrees,
+        Radians
     }
 }

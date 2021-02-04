@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.String;
 
 namespace InventorWrapper.IProps
 {
@@ -14,10 +15,31 @@ namespace InventorWrapper.IProps
 
         private PropertySets _propertySets;
 
+        private List<Tuple<string, string>> _customProperties;
+
         public InventorProperties(PropertySets propertySets)
         {
             _propertySets = propertySets;
         }
+
+        public List<Tuple<string, string>> CustomProperties
+        {
+            get
+            {
+                var customProperties = _propertySets[IpropertyEnum.Custom.GetCategory()];
+
+                if (_customProperties == null)
+                {
+                    _customProperties = (from Property customProperty 
+                        in customProperties select ( new Tuple<string, string>(customProperty.Name, customProperty.Value as string))).ToList();
+                }
+
+                return _customProperties;
+            }
+        }
+
+        public bool PropertyExists(string propertyName) => CustomProperties.Count > 0 &&
+            CustomProperties.Any(prop => prop.Item1.ToUpper() == propertyName.ToUpper());
 
         /// <summary>
         /// Gets the given iproperty if the custom is selected give the name
@@ -27,7 +49,9 @@ namespace InventorWrapper.IProps
         /// <returns></returns>
         public string GetPropertyValue(IpropertyEnum ipropertyEnum, string customName = "")
         {
-            var property = _propertySets[ipropertyEnum.GetCategory()][ipropertyEnum == IpropertyEnum.Custom ? customName : ipropertyEnum.GetDescription()];
+            var property = ipropertyEnum == IpropertyEnum.Custom ? 
+                PropertyExists(customName) ? _propertySets[ipropertyEnum.GetCategory()][customName] : null :
+                _propertySets[ipropertyEnum.GetCategory()][ipropertyEnum.GetDescription()];
 
             if (property == null)
             {

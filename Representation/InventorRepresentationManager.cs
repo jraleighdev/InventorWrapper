@@ -16,14 +16,11 @@ namespace InventorWrapper.Representation
         public InventorRepresentationManager(RepresentationsManager representationsManager)
         {
             _representationsManager = representationsManager;
-
-            foreach (DesignViewRepresentation r in _representationsManager.DesignViewRepresentations)
-            {
-               
-            }
         }
 
         public void ActivateLevelOfDetail(string name) => _representationsManager.LevelOfDetailRepresentations[name].Activate(true);
+
+        public string ActiveLevelOfDetail => _representationsManager.ActiveLevelOfDetailRepresentation.Name;
 
         public void ActivateDesignView(string name) => _representationsManager.DesignViewRepresentations[name].Activate();
 

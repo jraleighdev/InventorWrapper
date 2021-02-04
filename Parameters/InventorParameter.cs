@@ -1,4 +1,5 @@
 ﻿using Inventor;
+using InventorWrapper.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,12 @@ namespace InventorWrapper.Parameters
     {
         private Parameter _parameter;
 
+        public UnitTypes UnitType { get; private set; }
+
+        public LengthUnits LengthUnit { get; private set; }
+
+        public AngularUnits AngularUnit { get; private set; }
+
         public string Name
         {
             get => _parameter.Name;
@@ -24,6 +31,23 @@ namespace InventorWrapper.Parameters
             get => _parameter.Value;
 
             set => _parameter.Value = value;
+        }
+
+        public dynamic ConvertedValue
+        {
+            get
+            {
+                if (UnitType == UnitTypes.Length)
+                {
+                    return UnitManager.UnitsFromInventor((double)_parameter.Value);
+                }
+                else if (UnitType == UnitTypes.Angular)
+                {
+                    return UnitManager.UnitsFromInventor((double)_parameter.Value, UnitTypes.Angular);
+                }
+
+                return _parameter.Value;
+            }
         }
 
         public bool IsUser => _parameter.ParameterType == ParameterTypeEnum.kUserParameter;
@@ -45,6 +69,52 @@ namespace InventorWrapper.Parameters
         public InventorParameter(Parameter parameter)
         {
             _parameter = parameter;
+
+            SetUnitTypes();
+        }
+
+        private void SetUnitTypes()
+        {
+            string formattedUnits = Units.ToUpper();
+
+            switch (formattedUnits)
+            {
+                case "IN":
+                    LengthUnit = LengthUnits.In;
+                    UnitType = UnitTypes.Length;
+                    break;
+                case "MM":
+                    LengthUnit = LengthUnits.MM;
+                    UnitType = UnitTypes.Length;
+                    break;
+                case "M":
+                    LengthUnit = LengthUnits.M;
+                    UnitType = UnitTypes.Length;
+                    break;
+                case "RAD":
+                    AngularUnit = AngularUnits.Radians;
+                    UnitType = UnitTypes.Angular;
+                    break;
+                case "RADIAN":
+                    AngularUnit = AngularUnits.Radians;
+                    UnitType = UnitTypes.Angular;
+                    break;
+                case "DEG":
+                    AngularUnit = AngularUnits.Degrees;
+                    UnitType = UnitTypes.Angular;
+                    break;
+                case "DEGREES":
+                    AngularUnit = AngularUnits.Degrees;
+                    UnitType = UnitTypes.Angular;
+                    break;
+                case "UL":
+                case "UNITLESS":
+                    UnitType = UnitTypes.Unitless;
+                    break;
+                case "TEXT":
+                    UnitType = UnitTypes.Text;
+                    break;
+            }
         }
 
         public void Dispose()

@@ -31,10 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autodesk.Inventor.Interop, Version=24.0.0.0, Culture=neutral, PublicKeyToken=d84147f8b4276564, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\References\Autodesk.Inventor.Interop.dll</HintPath>
+    <Reference Include="Autodesk.Inventor.Interop, Version=25.0.0.0, Culture=neutral, PublicKeyToken=d84147f8b4276564">
+      <HintPath>References\Autodesk.Inventor.Interop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
+    <Compile Include="BOM\InventorBom.cs" />
+    <Compile Include="BOM\InventorBomItem.cs" />
     <Compile Include="CaptureDto\DrawingCapture\DimensionCaptureDto.cs" />
     <Compile Include="CaptureDto\DrawingCapture\DrawingCaptureDto.cs" />
     <Compile Include="CaptureDto\DrawingCapture\Enums\DimensionDirectionEnum.cs" />
@@ -74,7 +74,9 @@
     <Compile Include="Drawings\Point.cs" />
     <Compile Include="Extensions\ComponenOccurenceExtensions.cs" />
     <Compile Include="Features\InventorFeature.cs" />
+    <Compile Include="General\AngularUnits.cs" />
     <Compile Include="General\UnitManager.cs" />
+    <Compile Include="General\LengthUnits.cs" />
     <Compile Include="General\UnitTypes.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="IProps\InventorProperties.cs" />
@@ -87,6 +89,8 @@
     <Compile Include="Representation\InventorDesignViewRep.cs" />
     <Compile Include="Representation\InventorRepresentationManager.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="References\Autodesk.Inventor.Interop.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

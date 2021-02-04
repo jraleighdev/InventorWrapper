@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InventorWrapper.BOM;
 
 namespace InventorWrapper.Documents
 {
@@ -21,6 +22,8 @@ namespace InventorWrapper.Documents
         private InventorComponents _components;
 
         private InventorConstraints _constraints;
+
+        private InventorBom _bom;
 
         public AssemblyDocument _adoc;
 
@@ -107,6 +110,19 @@ namespace InventorWrapper.Documents
             }
 
             return tempdoc;
+        }
+
+        public InventorBom Bom
+        {
+            get
+            {
+                if (_bom == null)
+                {
+                    _bom = new InventorBom(this._adef.BOM);
+                }
+
+                return _bom;
+            }
         }
 
         public override void Dispose()
