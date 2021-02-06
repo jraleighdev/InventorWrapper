@@ -92,5 +92,8 @@
   <ItemGroup>
     <Content Include="References\Autodesk.Inventor.Interop.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="InventorWrapper.nuspec" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

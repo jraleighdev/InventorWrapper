@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>271f00ac-b705-48ed-926f-be2bbab06728</id>
+    <version>1.0.0</version>
+    <title>InventorWrapper</title>
+    <authors>jraleigdev</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/jraleighdev/InventorWrapper</projectUrl>
+    <description>Dotnet wrapper for autodesk inventor</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright 2021</copyright>
+    <tags>Autodesk Inventor</tags>
+  </metadata>
+</package>

@@ -26,6 +26,11 @@ namespace InventorWrapper.Parameters
             set => _parameter.Name = value;
         }
 
+        /// <summary>
+        /// Base value from inventor
+        /// Centimeters if it is a length unit
+        /// Radians if a angular unit
+        /// </summary>
         public dynamic Value
         {
             get => _parameter.Value;
@@ -33,6 +38,9 @@ namespace InventorWrapper.Parameters
             set => _parameter.Value = value;
         }
 
+        /// <summary>
+        /// Returns the units converted to the standard specified in the unit manager
+        /// </summary>
         public dynamic ConvertedValue
         {
             get
@@ -50,8 +58,14 @@ namespace InventorWrapper.Parameters
             }
         }
 
+        /// <summary>
+        /// If Parameter is a user created parameter
+        /// </summary>
         public bool IsUser => _parameter.ParameterType == ParameterTypeEnum.kUserParameter;
 
+        /// <summary>
+        /// Get the expression that evaluates to the parameter
+        /// </summary>
         public string Expression
         {
             get => _parameter.Expression;
@@ -59,6 +73,9 @@ namespace InventorWrapper.Parameters
             set => _parameter.Expression = value;
         }
 
+        /// <summary>
+        /// The type of units for the parameter
+        /// </summary>
         public string Units
         {
             get => _parameter.get_Units();

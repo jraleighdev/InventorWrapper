@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("InventorWrapper")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Dot net wrapper for Autodesk Inventor")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("jraleighdev")]
 [assembly: AssemblyProduct("InventorWrapper")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
