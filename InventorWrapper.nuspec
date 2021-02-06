@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package >
   <metadata>
-    <id>271f00ac-b705-48ed-926f-be2bbab06728</id>
+    <id>InventorWrapper</id>
     <version>1.0.0</version>
     <title>InventorWrapper</title>
     <authors>jraleigdev</authors>
