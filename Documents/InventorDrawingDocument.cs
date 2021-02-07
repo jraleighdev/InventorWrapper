@@ -9,12 +9,25 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.Documents
 {
+    /// <summary>
+    /// Inventor Drawing documetn
+    /// </summary>
     public class InventorDrawingDocument : InventorDocument
     {
+        /// <summary>
+        /// Reference to the interop drawing document 
+        /// </summary>
         private DrawingDocument _drawing;
 
+        /// <summary>
+        /// Sheets for the active document
+        /// </summary>
         public List<InventorSheet> Sheets { get; set; }
 
+        /// <summary>
+        /// Sets up the drawing document and gets the sheets
+        /// </summary>
+        /// <param name="doc"></param>
         public InventorDrawingDocument(Document doc) : base(doc) 
         {
             _drawing = (DrawingDocument)doc;
@@ -23,6 +36,9 @@ namespace InventorWrapper.Documents
             GetSheets();
         }
 
+        /// <summary>
+        /// Gets the sheets from the active document
+        /// </summary>
         private void GetSheets()
         {
             foreach (Sheet s in _drawing.Sheets)
@@ -31,6 +47,10 @@ namespace InventorWrapper.Documents
             }
         }
 
+        /// <summary>
+        /// Get the selected curve from the active sheet
+        /// </summary>
+        /// <returns></returns>
         public InventorDrawingCurve SelectedCurve()
         {
             if (SelectedItem() is DrawingCurveSegment drawingCurveSegment)
@@ -45,6 +65,10 @@ namespace InventorWrapper.Documents
             return null;
         }
 
+        /// <summary>
+        /// Gets all the selected curves
+        /// </summary>
+        /// <returns></returns>
         public List<InventorDrawingCurve> SelectedCurves()
         {
             var seletedItems = SelectedItems();

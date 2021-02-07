@@ -17,8 +17,15 @@ using InventorWrapper.Representation;
 
 namespace InventorWrapper.Documents
 {
+    /// <summary>
+    /// Base class of inventor documents
+    /// All sub documents inherit from this class
+    /// </summary>
     public class InventorDocument : IDisposable
     {
+        /// <summary>
+        /// Reference to the inventor document interop
+        /// </summary>
         public Document _document;
 
         private InventorParameters _parameters;
@@ -29,18 +36,39 @@ namespace InventorWrapper.Documents
 
         private List<InventorFeature> _features;
 
+        /// <summary>
+        /// Name of document without the file extension
+        /// </summary>
         public string Name => System.IO.Path.GetFileNameWithoutExtension(_document.FullFileName);
 
+        /// <summary>
+        /// Full file name of the document
+        /// </summary>
         public string FileName => _document.FullFileName;
 
-        public string Id => Guid.NewGuid().ToString();
+        /// <summary>
+        /// Unique id created for tracking the document
+        /// </summary>
+        public Guid Id { get; private set; }
 
+        /// <summary>
+        /// If the document is an assembly document
+        /// </summary>
         public bool IsAssemblyDoc => _document.DocumentType == DocumentTypeEnum.kAssemblyDocumentObject;
 
+        /// <summary>
+        /// If the document is a part document
+        /// </summary>
         public bool IsPartDoc => _document.DocumentType == DocumentTypeEnum.kPartDocumentObject;
 
+        /// <summary>
+        /// If the document is a drawing document
+        /// </summary>
         public bool IsDrawingDoc => _document.DocumentType == DocumentTypeEnum.kDrawingDocumentObject;
 
+        /// <summary>                   
+        /// Parameters for the documents
+        /// </summary>                  
         public InventorParameters Parameters
         {
             get
@@ -65,6 +93,9 @@ namespace InventorWrapper.Documents
             }
         }
 
+        /// <summary>                                                                             
+        /// Representations manager for the document manges visible parts and level of detail     
+        /// </summary>                                                                            
         public InventorRepresentationManager RepresentationManager
         {
             get
@@ -91,6 +122,9 @@ namespace InventorWrapper.Documents
             }
         }
 
+        /// <summary>                                                                             
+        /// Document properties allows access to general document properties and custom properties
+        /// </summary>                                                                            
         public InventorProperties Properties
         {
             get
@@ -104,6 +138,9 @@ namespace InventorWrapper.Documents
             }
         }
 
+        /// <summary>                                    
+        /// Features of the document edges, faces, etc...
+        /// </summary>                                   
         public List<InventorFeature> Features
         {
             get
@@ -136,11 +173,21 @@ namespace InventorWrapper.Documents
             }
         }
 
+        /// <summary>
+        /// Stores the interop reference and initializes the id
+        /// </summary>
+        /// <param name="doc"></param>
         public InventorDocument(Document doc)
         {
             _document = doc;
+            Id = Guid.NewGuid();
         }
 
+        /// <summary>
+        /// Gets the assembly document object from the document
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception">If the document is not an assembly document will throw an error</exception>
         public InventorAssemblyDocument GetAssemblyDocument()
         {
             if (!IsAssemblyDoc) throw new Exception($"Document {Name} is not an assembly document");
@@ -148,6 +195,11 @@ namespace InventorWrapper.Documents
             return new InventorAssemblyDocument(_document);
         }
 
+        /// <summary>
+        /// Gets the part document object from the document
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception">If the document is not a part document will throw an error</exception>
         public InventorPartDocument GetPartDocument()
         {
             if (!IsPartDoc) throw new Exception($"Document {Name} is not a part document");
@@ -155,6 +207,11 @@ namespace InventorWrapper.Documents
             return new InventorPartDocument(_document);
         }
 
+        /// <summary>                                                                                           
+        /// Gets the drawing document object from the document                                                     
+        /// </summary>                                                                                          
+        /// <returns></returns>                                                                                 
+        /// <exception cref="Exception">If the document is not a drawing document will throw an error</exception>  
         public InventorDrawingDocument GetDrawingDocument()
         {
             if (!IsDrawingDoc) throw new Exception($"Document {Name} is not a drawing document");
@@ -162,17 +219,36 @@ namespace InventorWrapper.Documents
             return new InventorDrawingDocument(_document);
         }
 
+        /// <summary>
+        /// Saves the document
+        /// </summary>
         public void Save() => _document.Save2(true);
 
+        /// <summary>
+        /// Saves a copy of the document
+        /// </summary>
+        /// <param name="name"></param>
         public void SaveAs(string name)
         {
             _document.SaveAs(name, true);
         }
 
+        /// <summary>
+        /// Closes the document
+        /// </summary>
         public void Close() => _document.Close();
 
+        /// <summary>
+        /// Updates the document from internal updates
+        /// </summary>
         public void Update() => _document.Update2(true);
 
+        /// <summary>
+        /// Sets the status of a feature in the document
+        /// </summary>
+        /// <param name="name">Name of the feature</param>
+        /// <param name="status">True of False if the feature should be active</param>
+        /// <returns></returns>
         public bool SetFeatureStatus(string name, bool status)
         {
             var value = false;
@@ -209,6 +285,10 @@ namespace InventorWrapper.Documents
             return value;
         }
 
+        /// <summary>
+        /// Selects the document from the active model
+        /// </summary>
+        /// <param name="select"></param>
         public void Select(object select)
         {
             try
@@ -217,10 +297,14 @@ namespace InventorWrapper.Documents
             }
             catch (Exception ex)
             {
-                Debugger.Break();
+                throw new Exception($"Could not select object {ex.Message}");
             }
         }
 
+        /// <summary>
+        /// Selects a feature based on data in the dto
+        /// </summary>
+        /// <param name="featureCapture">Data from the feature used to select the feature in the active document</param>
         public void Select(FeatureCaptureDto featureCapture)
         {
             switch (featureCapture.Type)
@@ -248,6 +332,10 @@ namespace InventorWrapper.Documents
             }
         }
 
+        /// <summary>
+        /// Returns the select item in the active document
+        /// </summary>
+        /// <returns></returns>
         public object SelectedItem()
         {
             if (_document.SelectSet.Count != 1) return null;
@@ -255,6 +343,10 @@ namespace InventorWrapper.Documents
             return _document.SelectSet[1];
         }
 
+        /// <summary>
+        /// Returns all the selected items
+        /// </summary>
+        /// <returns></returns>
         public List<object> SelectedItems()
         {
             if (_document.SelectSet.Count == 0) return null;
@@ -269,6 +361,9 @@ namespace InventorWrapper.Documents
             return tempList;
         }
 
+        /// <summary>
+        /// Clear the selctions
+        /// </summary>
         public void ClearSelection()
         {
             _document.SelectSet.Clear();
