@@ -62,6 +62,7 @@
     <Compile Include="Components\InventorComponent.cs" />
     <Compile Include="Components\InventorComponents.cs" />
     <Compile Include="Constraints\InventorConstraints.cs" />
+    <Compile Include="CopyTools\ReferenceDto.cs" />
     <Compile Include="CopyTools\CopyHelpers.cs" />
     <Compile Include="Documents\DocumentHelper.cs" />
     <Compile Include="Documents\InventorAssemblyDocument.cs" />
