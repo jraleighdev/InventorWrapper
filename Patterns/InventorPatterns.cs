@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.Patterns
 {
+    /// <summary>
+    /// Patterns in the for the referenced assembly document
+    /// </summary>
     public class InventorPatterns : List<InventorPattern>
     {
         private InventorAssemblyDocument _adoc;
@@ -19,6 +22,12 @@ namespace InventorWrapper.Patterns
             GetPatterns();
         }
 
+        /// <summary>
+        /// Suppresses a pattern by the given name
+        /// </summary>
+        /// <param name="pattern"></param>
+        /// <param name="status"></param>
+        /// <exception cref="Exception"></exception>
         public void SuppressPattern(string pattern, bool status)
         {
             OccurrencePattern occPattern = null;
@@ -56,6 +65,9 @@ namespace InventorWrapper.Patterns
             }
         }
 
+        /// <summary>
+        /// Gets all the patterns
+        /// </summary>
         private void GetPatterns()
         {
             foreach (OccurrencePattern pattern in _adoc._adef.OccurrencePatterns)

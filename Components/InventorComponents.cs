@@ -8,10 +8,18 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.Components
 {
+    /// <summary>
+    /// Collection of inventor component
+    /// </summary>
     public class InventorComponents : List<InventorComponent>
     {
         private InventorAssemblyDocument _adoc;
 
+        /// <summary>
+        /// Sets the reference to the assembly document and if recursion is true will grab all the child occurrences of sub assemblies
+        /// </summary>
+        /// <param name="adoc"></param>
+        /// <param name="recurse"></param>
         public InventorComponents(InventorAssemblyDocument adoc, bool recurse = false)
         {
             _adoc = adoc;
@@ -19,6 +27,12 @@ namespace InventorWrapper.Components
             GetComponents(_adoc._adef.Occurrences, recurse);
         }
 
+        /// <summary>
+        /// Sets the status of component in the assembly by reference
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <exception cref="Exception"></exception>
         public void SetComponentStatus(string name, bool value)
         {
             try
@@ -42,6 +56,11 @@ namespace InventorWrapper.Components
             }
         }
 
+        /// <summary>
+        /// Deletes the component by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <exception cref="Exception"></exception>
         public void DeleteComponent(string name)
         {
             var set = false;
@@ -62,6 +81,10 @@ namespace InventorWrapper.Components
             }
         }
 
+        /// <summary>
+        /// Deletes all components in the by document reference
+        /// </summary>
+        /// <param name="name"></param>
         public void DeleteComponents(string name)
         {
             foreach (ComponentOccurrence c in _adoc._adef.Occurrences)
@@ -96,6 +119,12 @@ namespace InventorWrapper.Components
             }
         }
 
+        /// <summary>
+        /// Gets the status of component in the assembly
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public bool GetComponentStatus(string name)
         {
             try
@@ -110,6 +139,11 @@ namespace InventorWrapper.Components
             }
         }
 
+        /// <summary>
+        /// Gets all the components in the active assembly
+        /// </summary>
+        /// <param name="occurrences"></param>
+        /// <param name="recurse"></param>
         public void GetComponents(ComponentOccurrences occurrences, bool recurse)
         {
             foreach (ComponentOccurrence c in occurrences)

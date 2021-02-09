@@ -12,6 +12,9 @@ using InventorWrapper.BOM;
 
 namespace InventorWrapper.Documents
 {
+    /// <summary>
+    /// Inventor Assembly document
+    /// </summary>
     public class InventorAssemblyDocument : InventorDocument 
     {
        
@@ -25,10 +28,20 @@ namespace InventorWrapper.Documents
 
         private InventorBom _bom;
 
+        /// <summary>
+        /// Backing interop object for the assembly object
+        /// </summary>
         public AssemblyDocument _adoc;
 
+        /// <summary>
+        /// Component definition for the assembly document
+        /// </summary>
         public AssemblyComponentDefinition _adef;
 
+        /// <summary>
+        /// Casts the source document as an assembly document, assembly component definition, and setup the features
+        /// </summary>
+        /// <param name="document"></param>
         public InventorAssemblyDocument(Document document) : base(document)
         {
             _adoc = document as AssemblyDocument;
@@ -38,6 +51,9 @@ namespace InventorWrapper.Documents
             var f = _adef.Features;
         }
 
+        /// <summary>
+        /// Gets all the documents that the assembly document references
+        /// </summary>
         public List<InventorDocument> ReferencedDocuments
         {
             get
@@ -56,6 +72,9 @@ namespace InventorWrapper.Documents
             }            
         }
 
+        /// <summary>
+        /// Gets all the component patterns in the assembly
+        /// </summary>
         public InventorPatterns Patterns
         {
             get
@@ -69,6 +88,9 @@ namespace InventorWrapper.Documents
             }
         }
 
+        /// <summary>
+        /// Gets all the component occurrences in the assembly
+        /// </summary>
         public InventorComponents Components
         {
             get
@@ -82,6 +104,9 @@ namespace InventorWrapper.Documents
             }
         }
 
+        /// <summary>
+        /// Gets all the constraints active assembly
+        /// </summary>
         public InventorConstraints Constraints
         {
             get
@@ -95,6 +120,11 @@ namespace InventorWrapper.Documents
             }
         }
 
+        /// <summary>
+        /// Searches the assembly for the referenced document
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public InventorDocument GetReferencedDocument(string name)
         {
             InventorDocument tempdoc = null;
@@ -112,6 +142,9 @@ namespace InventorWrapper.Documents
             return tempdoc;
         }
 
+        /// <summary>
+        /// Gets the bill of material from the assembly
+        /// </summary>
         public InventorBom Bom
         {
             get

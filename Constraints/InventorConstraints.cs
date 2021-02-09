@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.Constraints
 {
+    /// <summary>
+    /// Manages assembly constraints and statuses
+    /// </summary>
     public class InventorConstraints
     {
         private InventorAssemblyDocument _adoc;
@@ -20,6 +23,12 @@ namespace InventorWrapper.Constraints
             _adoc = adoc;
         }
 
+        /// <summary>
+        /// Sets the status of named constraint
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public bool SetConstraintStatus(string name, bool status)
         {
             var value = false;
@@ -37,6 +46,9 @@ namespace InventorWrapper.Constraints
             return value;
         }
 
+        /// <summary>
+        /// Gets a list of all the constraints
+        /// </summary>
         public List<string> ConstraintNames
         {
             get

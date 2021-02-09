@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.General
 {
+    /// <summary>
+    /// Types of length units
+    /// </summary>
     public enum LengthUnits
     {
         In,
