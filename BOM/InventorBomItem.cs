@@ -5,6 +5,9 @@ using InventorWrapper.Documents;
 
 namespace InventorWrapper.BOM
 {
+    /// <summary>
+    /// Single row of the bill material
+    /// </summary>
     public class InventorBomItem : IDisposable
     {
         private BOMRow _row;
@@ -16,6 +19,9 @@ namespace InventorWrapper.BOM
             _row = row;
         }
 
+        /// <summary>
+        /// Document reference for the bom item
+        /// </summary>
         public InventorDocument Document
         {
             get
@@ -29,6 +35,9 @@ namespace InventorWrapper.BOM
             }
         }
 
+        /// <summary>
+        /// Qty of items for the bill
+        /// </summary>
         public int Qty => _row.ItemQuantity;
 
         public void Dispose()

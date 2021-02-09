@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.IProps
 {
+    /// <summary>
+    /// Maps location of inventor properties
+    /// Description attribute is the name of the property in inventor
+    /// Category refers to the tab
+    /// </summary>
     public enum IpropertyEnum
     {
         [Description("Description")]

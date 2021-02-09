@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.Helpers
 {
+    /// <summary>
+    /// Helpers for getting metadata from enums
+    /// </summary>
     public static class EnumHelpers
     {
+        /// <summary>
+        /// Get the description attribute from the enum
+        /// </summary>
+        /// <param name="enumValue"></param>
+        /// <returns></returns>
         public static string GetDescription(this Enum enumValue)
         {
             //Look for DescriptionAttributes on the enum field
@@ -26,6 +34,11 @@ namespace InventorWrapper.Helpers
             }
         }
 
+        /// <summary>
+        /// Get the category attribute from the enum
+        /// </summary>
+        /// <param name="enumValue"></param>
+        /// <returns></returns>
         public static string GetCategory(this Enum enumValue)
         {
             //Look for DescriptionAttributes on the enum field
@@ -43,6 +56,11 @@ namespace InventorWrapper.Helpers
             }
         }
 
+        /// <summary>
+        /// Converts an enum to a list of strings
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static List<string> EnumToList<T>() where T : Enum
         {
             return Enum.GetValues(typeof(T)).Cast<T>().Select(x => x.ToString()).ToList();

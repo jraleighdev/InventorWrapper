@@ -9,8 +9,14 @@ using static System.String;
 
 namespace InventorWrapper.IProps
 {
+    /// <summary>
+    /// General document properties and custom properties
+    /// </summary>
     public class InventorProperties
     {
+        /// <summary>
+        /// Name of the Project tab in inventor
+        /// </summary>
         public const string ProjectTab = "Design Tracking Properties";
 
         private PropertySets _propertySets;
@@ -22,6 +28,9 @@ namespace InventorWrapper.IProps
             _propertySets = propertySets;
         }
 
+        /// <summary>
+        /// Custom properties for the document
+        /// </summary>
         public List<Tuple<string, string>> CustomProperties
         {
             get
@@ -38,6 +47,11 @@ namespace InventorWrapper.IProps
             }
         }
 
+        /// <summary>
+        /// Checks if the property exists
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public bool PropertyExists(string propertyName) => CustomProperties.Count > 0 &&
             CustomProperties.Any(prop => prop.Item1.ToUpper() == propertyName.ToUpper());
 
@@ -61,6 +75,13 @@ namespace InventorWrapper.IProps
             return property.Value as string;
         }
 
+        /// <summary>
+        /// Sets the value of the given property
+        /// </summary>
+        /// <param name="ipropertyEnum"></param>
+        /// <param name="value"></param>
+        /// <param name="customName"></param>
+        /// <exception cref="Exception"></exception>
         public void SetPropertyValue(IpropertyEnum ipropertyEnum, string value, string customName)
         {
             Property property = null;

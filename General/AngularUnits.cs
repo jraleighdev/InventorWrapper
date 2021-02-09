@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.General
 {
+    /// <summary>
+    /// Types of angular units
+    /// </summary>
     public enum AngularUnits
     {
         Degrees,

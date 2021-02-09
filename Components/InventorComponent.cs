@@ -9,20 +9,38 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.Components
 {
+    /// <summary>
+    /// Inventor component reference represents a component in hte model
+    /// </summary>
     public class InventorComponent : IDisposable
     {
+        /// <summary>
+        /// Document reference of the component
+        /// </summary>
         private InventorDocument _document;
 
+        /// <summary>
+        /// Interop reference for the component
+        /// </summary>
         public ComponentOccurrence _component;
 
+        /// <summary>
+        /// Name of the component
+        /// </summary>
         public string Name => _component.Name;
 
+        /// <summary>
+        /// Gets and sets the visibility of the component
+        /// </summary>
         public bool Visible
         {
             get => _component.Visible;
             set => _component.Visible = value;
         }
 
+        /// <summary>
+        /// Gets and sets the suppression status of the component
+        /// </summary>
         public bool Suppressed
         {
             get => _component.Suppressed;
@@ -46,8 +64,14 @@ namespace InventorWrapper.Components
             }
         }
 
+        /// <summary>
+        /// If the component is a pattern element
+        /// </summary>
         public bool IsPatternElement => _component.IsPatternElement;
 
+        /// <summary>
+        /// Inventor document reference
+        /// </summary>
         public InventorDocument Document
         { 
             get

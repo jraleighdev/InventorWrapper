@@ -73,7 +73,7 @@
     <Compile Include="Drawings\InventorSheet.cs" />
     <Compile Include="Drawings\InventorView.cs" />
     <Compile Include="Drawings\Point.cs" />
-    <Compile Include="Extensions\ComponenOccurenceExtensions.cs" />
+    <Compile Include="Extensions\ComponentOccurenceExtensions.cs" />
     <Compile Include="Features\InventorFeature.cs" />
     <Compile Include="General\AngularUnits.cs" />
     <Compile Include="General\UnitManager.cs" />
@@ -87,7 +87,6 @@
     <Compile Include="Patterns\InventorPattern.cs" />
     <Compile Include="Patterns\InventorPatterns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Representation\InventorDesignViewRep.cs" />
     <Compile Include="Representation\InventorRepresentationManager.cs" />
   </ItemGroup>
   <ItemGroup>

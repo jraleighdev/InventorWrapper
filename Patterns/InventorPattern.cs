@@ -10,12 +10,21 @@ using System.Threading.Tasks;
 
 namespace InventorWrapper.Patterns
 {
+    /// <summary>
+    /// Inventor pattern 
+    /// </summary>
     public class InventorPattern : IDisposable
     {
+        /// <summary>
+        /// Occurence pattern interop reference
+        /// </summary>
         public OccurrencePattern _pattern;
 
         private List<InventorComponent> _occurences;
 
+        /// <summary>
+        /// Gets all the occurrences in the pattern
+        /// </summary>
         public List<InventorComponent> Occurences
         {
             get
@@ -43,10 +52,19 @@ namespace InventorWrapper.Patterns
             }
         }
 
+        /// <summary>
+        /// Name of the pattern
+        /// </summary>
         public string Name => _pattern.Name;
 
+        /// <summary>
+        /// If this item is a pattern element
+        /// </summary>
         public bool IsPatternElement => _pattern.IsPatternElement;
 
+        /// <summary>
+        /// I the item is suppressed
+        /// </summary>
         public bool IsSuppressed => Occurences.Any(x => x.Suppressed);
 
         public InventorPattern(OccurrencePattern pattern)
