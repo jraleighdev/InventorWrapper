@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace InventorWrapper.Documents
 {
     /// <summary>
-    /// Inventor Drawing documetn
+    /// Inventor Drawing document
     /// </summary>
     public class InventorDrawingDocument : InventorDocument
     {
