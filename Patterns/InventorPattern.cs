@@ -16,7 +16,7 @@ namespace InventorWrapper.Patterns
     public class InventorPattern : IDisposable
     {
         /// <summary>
-        /// Occurence pattern interop reference
+        /// Occurrence pattern interop reference
         /// </summary>
         public OccurrencePattern _pattern;
 

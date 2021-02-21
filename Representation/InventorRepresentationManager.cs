@@ -20,7 +20,7 @@ namespace InventorWrapper.Representation
         }
 
         /// <summary>
-        /// Activates the the level of detail in the model
+        /// Activates the level of detail in the model
         /// </summary>
         /// <param name="name"></param>
         public void ActivateLevelOfDetail(string name) => _representationsManager.LevelOfDetailRepresentations[name].Activate(true);

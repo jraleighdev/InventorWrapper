@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace InventorWrapper.Components
 {
     /// <summary>
-    /// Inventor component reference represents a component in hte model
+    /// Inventor component reference represents a component in the model
     /// </summary>
     public class InventorComponent : IDisposable
     {

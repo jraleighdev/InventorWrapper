@@ -48,7 +48,7 @@ namespace InventorWrapper
         }
 
         /// <summary>
-        /// Tells the wrapper to stop listening to changes with the active dcoument
+        /// Tells the wrapper to stop listening to changes with the active document
         /// </summary>
         public static void StopListening()
         {
@@ -57,7 +57,7 @@ namespace InventorWrapper
 
         /// <summary>
         /// Notifies listeners that the active document has changed
-        /// Parameters are passed from inventor into this metho
+        /// Parameters are passed from inventor into this method
         /// </summary>
         /// <param name="DocumentObject"></param>
         /// <param name="BeforeOrAfter"></param>
@@ -82,7 +82,7 @@ namespace InventorWrapper
         }
 
         /// <summary>
-        /// If you are developing an addin use this method to attach the wrapper to inventor
+        /// If you are developing an add-in use this method to attach the wrapper to inventor
         /// </summary>
         /// <param name="inventor"></param>
         public static void AddinAttach(Inventor.Application inventor)

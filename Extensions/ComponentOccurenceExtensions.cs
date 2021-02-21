@@ -13,7 +13,7 @@ namespace InventorWrapper.Extensions
     public static class ComponentOccurenceExtensions
     {
         /// <summary>
-        /// Get the occurence path as a list of strings
+        /// Get the occurrence path as a list of strings
         /// </summary>
         /// <param name="occurrence"></param>
         /// <returns></returns>
@@ -33,7 +33,7 @@ namespace InventorWrapper.Extensions
         }
 
         /// <summary>
-        /// Gets the occurence path as large string
+        /// Gets the occurrence path as large string
         /// </summary>
         /// <param name="occurrence"></param>
         /// <returns></returns>

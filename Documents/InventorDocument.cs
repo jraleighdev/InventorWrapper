@@ -362,7 +362,7 @@ namespace InventorWrapper.Documents
         }
 
         /// <summary>
-        /// Clear the selctions
+        /// Clear the selections
         /// </summary>
         public void ClearSelection()
         {
