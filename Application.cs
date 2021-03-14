@@ -200,6 +200,19 @@ namespace InventorWrapper
 
         #endregion
 
+        #region Geometry
+
+        /// <summary>
+        /// Gets the reference to transient geometry
+        /// </summary>
+        /// <returns></returns>
+        public static TransientGeometry GetTransientGeometry()
+        {
+            return _inventor.TransientGeometry;
+        }
+
+        #endregion
+
         /// <summary>
         /// Release resources
         /// </summary>

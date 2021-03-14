@@ -48,6 +48,30 @@ namespace InventorWrapper.Documents
         }
 
         /// <summary>
+        /// Adds new sheet to the drawing with option to add title block
+        /// </summary>
+        /// <param name="drawingSheetSize">Choose a standard sheet size or a custom one</param>
+        /// <param name="addDefaultBoder">Optional parameter to add the default border</param>
+        /// <param name="addTitleBlock">Optional parameter to add the title block if true title block name must be set</param>
+        /// <param name="titleBlockName">Optional parameter name of the title block to add</param>
+        /// <returns></returns>
+        public InventorSheet AddSheet(DrawingSheetSizeEnum drawingSheetSize, bool addDefaultBoder = true, bool addTitleBlock = false, string titleBlockName = "")
+        {
+            var sheet = new InventorSheet(_drawing.Sheets.Add(drawingSheetSize));
+
+            if (addDefaultBoder) sheet.AddBorder();
+
+            if (addTitleBlock)
+            {
+                
+            }
+
+            return sheet;
+        }
+
+        public InventorSheet ActiveSheet => new InventorSheet(_drawing.ActiveSheet);
+
+        /// <summary>
         /// Get the selected curve from the active sheet
         /// </summary>
         /// <returns></returns>
@@ -59,7 +83,7 @@ namespace InventorWrapper.Documents
             }
             else if (SelectedItem() is DrawingCurve drawingCurve)
             {
-                return new InventorDrawingCurve(drawingCurve);
+                return new InventorDrawingCurve(drawingCurve, _drawing.ActiveSheet);
             }
 
             return null;
@@ -83,7 +107,7 @@ namespace InventorWrapper.Documents
                 }
                 else if (s is DrawingCurve drawingCurve)
                 {
-                    tempList.Add(new InventorDrawingCurve(drawingCurve));
+                    tempList.Add(new InventorDrawingCurve(drawingCurve, _drawing.ActiveSheet));
                 }
             }
 
