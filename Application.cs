@@ -211,6 +211,24 @@ namespace InventorWrapper
             return _inventor.TransientGeometry;
         }
 
+        /// <summary>
+        /// Gets the reference to the transient objects
+        /// </summary>
+        /// <returns></returns>
+        public static TransientObjects GetTransientObjects()
+        {
+            return _inventor.TransientObjects;
+        }
+
+        /// <summary>
+        /// Creates an object collection to pass back to inventor
+        /// </summary>
+        /// <returns></returns>
+        public static ObjectCollection CreateObjectCollection()
+        {
+            return GetTransientObjects().CreateObjectCollection();
+        }
+
         #endregion
 
         /// <summary>

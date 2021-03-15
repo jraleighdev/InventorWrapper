@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Inventor;
 using InventorWrapper.Drawings.Curves;
+using InventorWrapper.Drawings.Enums;
 
 namespace InventorWrapper.Extensions.Curves
 {
@@ -77,6 +78,26 @@ namespace InventorWrapper.Extensions.Curves
         /// </summary>
         /// <returns></returns>
         public static GeometryPoint MinYPoint(this List<GeometryPoint> points) => points.MinYPoints().FirstOrDefault();
+
+        /// <summary>
+        /// Gets the center points from circular curves in the list
+        /// </summary>
+        /// <returns></returns>
+        public static List<GeometryPoint> CenterPoints(this List<GeometryPoint> points)
+        {
+            return points.Where(point => point.PointType == PointType.CenterPoint).ToList();
+        }
         
+        public static GeometryPoint MaxXMaxYPoint(this List<GeometryPoint> points) => 
+            points.MaxXPoints().MaxYPoint();
+        
+        public static GeometryPoint MaxXMinYPoint(this List<GeometryPoint> points) =>
+            points.MaxXPoints().MinYPoint();
+
+        public static GeometryPoint MinXMaxYPoint(this List<GeometryPoint> points) =>
+            points.MinXPoints().MaxYPoint();
+
+        public static GeometryPoint MinXMinYPoint(this List<GeometryPoint> points) =>
+            points.MinXPoints().MinYPoint();
     }
 }

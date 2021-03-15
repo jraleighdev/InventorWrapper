@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using InventorWrapper.Drawings.Enums;
 
 namespace InventorWrapper.Drawings.Curves
 {
@@ -59,6 +60,24 @@ namespace InventorWrapper.Drawings.Curves
                 
                 return _points;
             }
+        }
+
+        /// <summary>
+        /// Get the curves by the given type
+        /// </summary>
+        /// <returns></returns>
+        public List<InventorDrawingCurve> GetCurvesByType(CurveTypes curveType)
+        {
+            return this.Where(curve => curve.CurveType == curveType).ToList();
+        }
+
+        /// <summary>
+        /// Gets the circular curve
+        /// </summary>
+        /// <returns></returns>
+        public List<InventorDrawingCurve> GetCircularCurves()
+        {
+            return GetCurvesByType(CurveTypes.CircleCurve);
         }
         
         /// <summary>

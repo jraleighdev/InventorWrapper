@@ -58,37 +58,60 @@ namespace InventorWrapper.Drawings.Curves
         /// <summary>
         /// Start point of the curve returns null on circular curves
         /// </summary>
-        public GeometryPoint StartPoint => _curve.StartPoint == null ? null : new GeometryPoint(_curve.StartPoint, this);
+        public GeometryPoint StartPoint => _curve.StartPoint == null ? null : new GeometryPoint(_curve.StartPoint, this, PointType.EndPoint);
 
         /// <summary>
         /// End point of the curve returns null on circular curves
         /// </summary>
-        public GeometryPoint EndPoint => _curve.EndPoint == null ? null :  new GeometryPoint(_curve.EndPoint, this);
+        public GeometryPoint EndPoint => _curve.EndPoint == null ? null :  new GeometryPoint(_curve.EndPoint, this, PointType.EndPoint);
 
         /// <summary>
         /// Top left point of the curve 
         /// </summary>
-        public GeometryPoint TopLeftPoint => new GeometryPoint(_rangeBox.MinPoint.X, _rangeBox.MaxPoint.Y, this);
+        public GeometryPoint TopLeftPoint => new GeometryPoint(_rangeBox.MinPoint.X, _rangeBox.MaxPoint.Y, this, PointType.TopLeftPoint);
 
         /// <summary>
         /// Top Right point of the curve
         /// </summary>
-        public GeometryPoint TopRightPoint => new GeometryPoint(_rangeBox.MaxPoint, this);
+        public GeometryPoint TopRightPoint => new GeometryPoint(_rangeBox.MaxPoint, this, PointType.TopRightPoint);
 
         /// <summary>
         /// Bottom Left Point of the curve
         /// </summary>
-        public GeometryPoint BottomLeftPoint => new GeometryPoint(_rangeBox.MinPoint, this);
+        public GeometryPoint BottomLeftPoint => new GeometryPoint(_rangeBox.MinPoint, this, PointType.BottomLeftPoint);
 
         /// <summary>
         /// Bottom Right point of the curve
         /// </summary>
-        public GeometryPoint BottomRightPoint => new GeometryPoint(_rangeBox.MaxPoint.X, _rangeBox.MinPoint.Y, this);
+        public GeometryPoint BottomRightPoint => new GeometryPoint(_rangeBox.MaxPoint.X, _rangeBox.MinPoint.Y, this, PointType.BottomRightPoint);
+
+        /// <summary>
+        /// Max x vertex point of a circular curve
+        /// </summary>
+        public GeometryPoint RightMidPoint => new GeometryPoint(_rangeBox.MaxPoint.X, MidY, this, PointType.VertexPoint);
+        
+        /// <summary>
+        /// Max x vertex point of a circular curve
+        /// </summary>
+        public GeometryPoint TopMidPoint => new GeometryPoint(MidX, _rangeBox.MaxPoint.Y, this, PointType.VertexPoint);
+        
+        /// <summary>
+        /// Max x vertex point of a circular curve
+        /// </summary>
+        public GeometryPoint LeftMidPoint => new GeometryPoint(_rangeBox.MinPoint.X, MidY, this, PointType.VertexPoint);
+        
+        /// <summary>
+        /// Max x vertex point of a circular curve
+        /// </summary>
+        public GeometryPoint BottomMidPoint => new GeometryPoint(MidX, _rangeBox.MinPoint.Y, this, PointType.VertexPoint);
 
         /// <summary>
         /// Center point or midpoint of the curve
         /// </summary>
-        public GeometryPoint CenterPoint => _curve.CurveType == CurveTypeEnum.kCircleCurve ? new GeometryPoint(_curve.CenterPoint, this) : new GeometryPoint(_curve.MidPoint, this);
+        public GeometryPoint CenterPoint =>
+            _curve.CenterPoint == null ? null : new GeometryPoint(_curve.CenterPoint, this, PointType.CenterPoint);
+
+        public GeometryPoint MidPoint => _curve.MidPoint == null ? null : new GeometryPoint(_curve.MidPoint, this, PointType.MidPoint);
 
         /// <summary>
         /// Returns all the points on the curve that are not null
@@ -163,6 +186,16 @@ namespace InventorWrapper.Drawings.Curves
                 FindOccurence(value?.Parent);
             }
         }
+
+        /// <summary>
+        /// Gets the mid x value of the curves range box
+        /// </summary>
+        private double MidX => _rangeBox.MaxPoint.X - (_rangeBox.MaxPoint.X - _rangeBox.MinPoint.X) / 2;
+
+        /// <summary>
+        /// Gets the mid y value of the curves range box
+        /// </summary>
+        private double MidY => _rangeBox.MaxPoint.Y - (_rangeBox.MaxPoint.Y - _rangeBox.MinPoint.Y) / 2;
         
         public void Dispose()
         {

@@ -78,6 +78,7 @@
     <Compile Include="Drawings\DrawingSheet\InventorTitleBlock.cs" />
     <Compile Include="Drawings\Enums\CurveTypes.cs" />
     <Compile Include="Drawings\Enums\InventorDimensionType.cs" />
+    <Compile Include="Drawings\Enums\PointType.cs" />
     <Compile Include="Drawings\Enums\ViewSide.cs" />
     <Compile Include="Drawings\Interfaces\IlocationEntity.cs" />
     <Compile Include="Drawings\Interfaces\IMajorPoints.cs" />

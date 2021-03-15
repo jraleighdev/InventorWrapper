@@ -1,17 +1,20 @@
 ﻿using Inventor;
+using InventorWrapper.Drawings.Enums;
 
 namespace InventorWrapper.Drawings.Curves
 {
     public class GeometryPoint : Point
     {
-        private readonly InventorDrawingCurve _curve;
+        public InventorDrawingCurve Curve { get; private set; }
+        
+        public PointType PointType { get; private set; }
 
         /// <summary>
         /// Create geometry intent to apply dimensions
         /// </summary>
         public GeometryIntent CreateIntent()
         {
-            return _curve._sheet.CreateGeometryIntent(_curve._curve, CreatePoint());
+            return Curve._sheet.CreateGeometryIntent(Curve._curve, CreatePoint());
         }
 
         /// <summary>
@@ -20,9 +23,11 @@ namespace InventorWrapper.Drawings.Curves
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="curve"></param>
-        public GeometryPoint(double x, double y, InventorDrawingCurve curve) : base(x, y)
+        /// <param name="pointType"></param>
+        public GeometryPoint(double x, double y, InventorDrawingCurve curve, PointType pointType) : base(x, y)
         {
-            _curve = curve;
+            Curve = curve;
+            PointType = pointType;
         }
 
         /// <summary>
@@ -30,9 +35,11 @@ namespace InventorWrapper.Drawings.Curves
         /// </summary>
         /// <param name="point"></param>
         /// <param name="curve"></param>
-        public GeometryPoint(Point2d point, InventorDrawingCurve curve) : base(point)
+        /// <param name="pointType"></param>
+        public GeometryPoint(Point2d point, InventorDrawingCurve curve, PointType pointType) : base(point)
         {
-            _curve = curve;
+            Curve = curve;
+            PointType = pointType;
         }
         
         

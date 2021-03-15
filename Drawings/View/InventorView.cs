@@ -164,7 +164,47 @@ namespace InventorWrapper.Drawings
             }
         }
 
-        public Point DrawingTextLocator(InventorDimensionType dimensionType, ViewSide side, double adjustment)
+        /// <summary>
+        /// Add a ordinate dimension set to the view
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="dimensionType"></param>
+        /// <param name="viewSide"></param>
+        /// <param name="continuousRunning"></param>
+        /// <param name="adjustment"></param>
+        public void AddOrdinateDimension(List<GeometryPoint> points, InventorDimensionType dimensionType,
+            ViewSide viewSide, bool continuousRunning = true, double adjustment = 0)
+        {
+            var collection = InventorApplication.CreateObjectCollection();
+
+            foreach (var p in points)
+            {
+                collection.Add(p.CreateIntent());
+            }
+            
+            var dimTextLocation = DrawingTextLocator(dimensionType, viewSide, adjustment);
+
+            var dim = _sheet.DrawingDimensions.OrdinateDimensionSets.Add(collection, dimTextLocation.CreatePoint(), (DimensionTypeEnum)dimensionType);
+
+            dim.ContinuousRunning = continuousRunning;
+        }
+
+        public void AddDiameterDim(GeometryPoint point, ViewSide viewSide, double xAdjust = 1, double yAdjust = 1)
+        {
+            _sheet.DrawingDimensions.GeneralDimensions
+                .AddDiameter(new Point(point.X + xAdjust, point.Y + yAdjust).CreatePoint(), point.CreateIntent());
+        }
+
+        private Point DiameterDimTextLocator()
+        {
+            double x = 0;
+            double y = 0;
+            
+            // if (ViewSide=)
+            throw new NotImplementedException();
+        }
+        
+        private Point DrawingTextLocator(InventorDimensionType dimensionType, ViewSide side, double adjustment)
         {
             double x = 0;
             double y = 0;
