@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using InventorWrapper.Drawings.Curves;
 
 namespace InventorWrapper
 {
@@ -197,6 +198,54 @@ namespace InventorWrapper
         /// Close all active documents
         /// </summary>
         public static void CloseAll() => _inventor.Documents.CloseAll();
+
+        #endregion
+
+        #region Geometry
+
+        /// <summary>
+        /// Gets the reference to transient geometry
+        /// </summary>
+        /// <returns></returns>
+        public static TransientGeometry GetTransientGeometry()
+        {
+            return _inventor.TransientGeometry;
+        }
+
+        /// <summary>
+        /// Gets the reference to the transient objects
+        /// </summary>
+        /// <returns></returns>
+        public static TransientObjects GetTransientObjects()
+        {
+            return _inventor.TransientObjects;
+        }
+
+        /// <summary>
+        /// Creates an object collection to pass back to inventor
+        /// </summary>
+        /// <returns></returns>
+        public static ObjectCollection CreateObjectCollection()
+        {
+            return GetTransientObjects().CreateObjectCollection();
+        }
+
+        /// <summary>
+        /// Creates an object collection with the points populated
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public static ObjectCollection CreateObjectCollection(IEnumerable<GeometryPoint> points)
+        {
+            var objCol = GetTransientObjects().CreateObjectCollection();
+
+            foreach (var g in points)
+            {
+                objCol.Add(g.CreateIntent());
+            }
+
+            return objCol;
+        }
 
         #endregion
 
