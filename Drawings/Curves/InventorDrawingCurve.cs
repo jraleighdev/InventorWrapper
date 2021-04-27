@@ -129,6 +129,7 @@ namespace InventorWrapper.Drawings.Curves
                 BottomLeftPoint,
                 BottomRightPoint,
                 CenterPoint,
+                MidPoint
             };
 
             // remove all the null points

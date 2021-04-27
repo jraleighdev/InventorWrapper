@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using InventorWrapper.Drawings.Curves;
 
 namespace InventorWrapper
 {
@@ -227,6 +228,23 @@ namespace InventorWrapper
         public static ObjectCollection CreateObjectCollection()
         {
             return GetTransientObjects().CreateObjectCollection();
+        }
+
+        /// <summary>
+        /// Creates an object collection with the points populated
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public static ObjectCollection CreateObjectCollection(IEnumerable<GeometryPoint> points)
+        {
+            var objCol = GetTransientObjects().CreateObjectCollection();
+
+            foreach (var g in points)
+            {
+                objCol.Add(g.CreateIntent());
+            }
+
+            return objCol;
         }
 
         #endregion

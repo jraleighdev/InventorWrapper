@@ -72,8 +72,12 @@
     <Compile Include="Drawings\Curves\GeometryPoint.cs" />
     <Compile Include="Drawings\Curves\InventorDrawingCurve.cs" />
     <Compile Include="Drawings\Curves\InventorDrawingCurves.cs" />
-    <Compile Include="Drawings\Dimensions\InventorDimensionBase.cs" />
+    <Compile Include="Drawings\Dimensions\IDimension.cs" />
     <Compile Include="Drawings\Dimensions\InventorGeneralDimension.cs" />
+    <Compile Include="Drawings\Dimensions\InventorLinearGeneralDim.cs" />
+    <Compile Include="Drawings\Dimensions\OrdinateDims\InventorDiameterDimension.cs" />
+    <Compile Include="Drawings\Dimensions\OrdinateDims\InventorOrdinateDimensionSet.cs" />
+    <Compile Include="Drawings\Dimensions\OrdinateDims\InventorOrdinateDimension.cs" />
     <Compile Include="Drawings\DrawingSheet\InventorSheet.cs" />
     <Compile Include="Drawings\DrawingSheet\InventorTitleBlock.cs" />
     <Compile Include="Drawings\Enums\CurveTypes.cs" />

@@ -20,6 +20,8 @@ namespace InventorWrapper.Documents
        
         private List<InventorDocument> _referencedDocuments;
 
+        private List<InventorDocument> _children;
+
         private InventorPatterns _inventorPatterns;
 
         private InventorComponents _components;
@@ -73,6 +75,28 @@ namespace InventorWrapper.Documents
         }
 
         /// <summary>
+        /// Gets the documents immediate children
+        /// </summary>
+        public List<InventorDocument> ChildDocuments
+        {
+            get 
+            {
+                if (_children == null)
+                {
+                    _children = new List<InventorDocument>();
+
+                    foreach (Document doc in _adoc.ReferencedDocuments)
+                    {
+                        _children.Add(new InventorDocument(doc));
+                    }
+                }
+
+                return _children;
+            }
+        }
+
+
+            /// <summary>
         /// Gets all the component patterns in the assembly
         /// </summary>
         public InventorPatterns Patterns
