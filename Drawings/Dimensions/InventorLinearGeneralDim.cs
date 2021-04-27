@@ -1,6 +1,6 @@
 ﻿namespace InventorWrapper.Drawings.Dimensions
 {
-    public class InventorDimensionBase
+    public class InventorLinearGeneralDim
     {
         
     }
