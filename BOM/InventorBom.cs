@@ -78,11 +78,40 @@ namespace InventorWrapper.BOM
         /// Gets all the bill items in the active assembly
         /// </summary>
         /// <returns></returns>
-        public List<InventorBomItem> GetGill()
+        public List<InventorBomItem> GetBill()
         {
-            return (from BOMRow row in _view.BOMRows select new InventorBomItem(row)).ToList();
+            var tempList = new List<InventorBomItem>();
+
+            foreach (BOMRow row in _view.BOMRows)
+            {
+                var bomItem = new InventorBomItem(row);
+
+                if (row.ChildRows != null && row.ChildRows.Count > 0)
+                {
+                    GetChildren(row.ChildRows, bomItem);
+                }
+
+                tempList.Add(bomItem);
+            }
+
+            return tempList;
         }
-        
+
+        private void GetChildren(BOMRowsEnumerator rows, InventorBomItem parent)
+        {
+            foreach (BOMRow row in rows)
+            {
+                var bomItem = new InventorBomItem(row);
+
+                parent.Children.Add(bomItem);
+
+                if (row.ChildRows != null && row.ChildRows.Count > 0)
+                {
+                    GetChildren(row.ChildRows, bomItem);
+                }
+            }
+        }
+
         public void Dispose()
         {
             if (_bom == null) return;

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Application.cs" />
     <Compile Include="BOM\InventorBom.cs" />
+    <Compile Include="BOM\InventorBomHelpers.cs" />
     <Compile Include="BOM\InventorBomItem.cs" />
     <Compile Include="CaptureDto\DrawingCapture\DimensionCaptureDto.cs" />
     <Compile Include="CaptureDto\DrawingCapture\DrawingCaptureDto.cs" />
