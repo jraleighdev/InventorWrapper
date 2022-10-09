@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Inventor;
 using InventorWrapper.Documents;
@@ -17,6 +18,7 @@ namespace InventorWrapper.BOM
         public InventorBomItem(BOMRow row)
         {
             _row = row;
+            Children = new List<InventorBomItem>();
         }
 
         /// <summary>
@@ -34,6 +36,11 @@ namespace InventorWrapper.BOM
                 return _document;
             }
         }
+
+        /// <summary>
+        /// Children of the bom item
+        /// </summary>
+        public List<InventorBomItem> Children { get; set; }
 
         /// <summary>
         /// Qty of items for the bill
