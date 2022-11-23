@@ -157,6 +157,26 @@ namespace InventorWrapper
             }
         }
 
+        /// <summary>
+        /// Checks if an instance of inventor is running
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsInventorRunning()
+        {
+            try
+            {
+                // try to attach to a running instance of inventor
+                _inventor = (Inventor.Application)Marshal.GetActiveObject("Inventor.Application");
+                _events = _inventor.ApplicationEvents;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+            return _inventor != null;
+        }
+
         #endregion
 
         #region Document Methods and Properties
