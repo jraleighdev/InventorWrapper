@@ -192,6 +192,18 @@ namespace InventorWrapper.Documents
                 }
             }
 
+            if (Components != null)
+            {
+                Components.Dispose();
+            }
+
+            if (Bom != null)
+            {
+                Components.Dispose();
+            }
+
+
+
             base.Dispose();
         }
     }

@@ -11,7 +11,7 @@ namespace InventorWrapper.Components
     /// <summary>
     /// Collection of inventor component
     /// </summary>
-    public class InventorComponents : List<InventorComponent>
+    public class InventorComponents : List<InventorComponent>, IDisposable
     {
         private InventorAssemblyDocument _adoc;
 
@@ -155,6 +155,20 @@ namespace InventorWrapper.Components
                     if (c.Definition.Type == ObjectTypeEnum.kAssemblyComponentDefinitionObject || c.Definition.Type == ObjectTypeEnum.kWeldmentComponentDefinitionObject)
                     {
                         GetComponents(occurrences, recurse);
+                    }
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            if (Count > 0)
+            {
+                foreach (var c in this)
+                {
+                    if (c != null)
+                    {
+                        c.Dispose();
                     }
                 }
             }
