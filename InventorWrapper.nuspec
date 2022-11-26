@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>InventorWrapper</id>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <title>InventorWrapper</title>
     <authors>jraleigdev</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,4 +13,7 @@
     <copyright>Copyright 2021</copyright>
     <tags>Autodesk Inventor</tags>
   </metadata>
+  <files>
+    <file src="bin\Debug\Autodesk.Inventor.Interop.dll" target="lib"/>
+  </files>
 </package>
