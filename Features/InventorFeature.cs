@@ -28,7 +28,7 @@ namespace InventorWrapper.Features
             get => _feature.Suppressed;
             set => _feature.Suppressed = value;
         }
-        
+
         public InventorFeature(PartFeature feature)
         {
             _feature = feature;

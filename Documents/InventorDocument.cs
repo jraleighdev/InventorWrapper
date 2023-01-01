@@ -228,9 +228,9 @@ namespace InventorWrapper.Documents
         /// Saves a copy of the document
         /// </summary>
         /// <param name="name"></param>
-        public void SaveAs(string name)
+        public void SaveAs(string name, bool saveCopyAs = false)
         {
-            _document.SaveAs(name, true);
+            _document.SaveAs(name, saveCopyAs);
         }
 
         /// <summary>

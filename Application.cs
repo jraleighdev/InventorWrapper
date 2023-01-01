@@ -215,6 +215,17 @@ namespace InventorWrapper
         }
 
         /// <summary>
+        /// Adds a new inventor document 
+        /// This will become the active document
+        /// </summary>
+        /// <param name="documentType"></param>
+        /// <param name="location"></param>
+        public static void Add(InventorDocumentType documentType, string templateLocation)
+        {
+            _inventor.Documents.Add((DocumentTypeEnum)documentType, templateLocation);
+        }
+
+        /// <summary>
         /// Close all active documents
         /// </summary>
         public static void CloseAll() => _inventor.Documents.CloseAll();

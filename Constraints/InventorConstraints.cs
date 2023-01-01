@@ -1,5 +1,6 @@
 ﻿using Inventor;
 using InventorWrapper.Documents;
+using InventorWrapper.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,6 +22,46 @@ namespace InventorWrapper.Constraints
         public InventorConstraints(InventorAssemblyDocument adoc)
         {
             _adoc = adoc;
+        }
+
+        public void AddMateConstraint(InventorProxy proxyOne, InventorProxy proxyTwo, double offset)
+        {
+            _adoc._adef.Constraints.AddMateConstraint(proxyOne._reference, proxyTwo._reference, offset);
+        }
+
+        public void AddMateConstraint(InventorWorkPlane plane, InventorProxy proxyTwo, double offset)
+        {
+            _adoc._adef.Constraints.AddMateConstraint(plane._workPlane, proxyTwo._reference, offset);
+        }
+
+        public void AddFlushConstraint(InventorWorkPlane plane, InventorProxy proxyTwo, double offset)
+        {
+            _adoc._adef.Constraints.AddFlushConstraint(plane._workPlane, proxyTwo._reference, offset);
+        }
+
+        public void AddFlushConstraint(InventorProxy proxyOne, InventorProxy proxyTwo, double offset)
+        {
+            _adoc._adef.Constraints.AddFlushConstraint(proxyOne._reference, proxyTwo._reference, offset);
+        }
+
+        public void Delete(string name)
+        {
+            try
+            {
+                _adoc._adef.Constraints[name].Delete();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not delete constraint {name}", ex);
+            }
+        }
+
+        public void DeleteAll()
+        {
+            foreach (AssemblyConstraint constraint in _adoc._adef.Constraints)
+            {
+                constraint.Delete();
+            }
         }
 
         /// <summary>

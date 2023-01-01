@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using InventorWrapper.BOM;
+using InventorWrapper.Geometry;
 
 namespace InventorWrapper.Documents
 {
@@ -23,6 +24,10 @@ namespace InventorWrapper.Documents
         private List<InventorDocument> _children;
 
         private InventorPatterns _inventorPatterns;
+
+        private InventorWorkPlanes _inventorWorkPlanes;
+
+        private InventorWorkAxes _inventorWorkAxes;
 
         private InventorComponents _components;
 
@@ -92,6 +97,32 @@ namespace InventorWrapper.Documents
                 }
 
                 return _children;
+            }
+        }
+
+        public InventorWorkPlanes WorkPlanes
+        {
+            get
+            {
+                if (_inventorWorkPlanes == null)
+                {
+                    _inventorWorkPlanes = new InventorWorkPlanes(_adef);
+                } 
+
+                return _inventorWorkPlanes;
+            }
+        }
+
+        public InventorWorkAxes WorkAxes
+        {
+            get
+            {
+                if (_inventorWorkAxes == null)
+                {
+                    _inventorWorkAxes = new InventorWorkAxes(_adef);
+                }
+
+                return _inventorWorkAxes;
             }
         }
 

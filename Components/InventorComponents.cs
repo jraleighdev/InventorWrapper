@@ -1,8 +1,11 @@
 ﻿using Inventor;
+using InventorWrapper.Components.Options;
 using InventorWrapper.Documents;
+using InventorWrapper.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -63,22 +66,16 @@ namespace InventorWrapper.Components
         /// <exception cref="Exception"></exception>
         public void DeleteComponent(string name)
         {
-            var set = false;
+            var componentToRemove = this.FirstOrDefault(x => x.Name == name);
 
-            foreach (ComponentOccurrence c in _adoc._adef.Occurrences)
-            {
-                if (c.Name == name)
-                {
-                    c.Delete();
-                    set = true;
-                    break;
-                }
-            }
+            if (componentToRemove == null) throw new Exception($"Could not find component {name} in document {_adoc.Name}");
 
-            if (!set)
-            {
-                throw new Exception($"Could not find component {name} in document {_adoc.Name}");
-            }
+            componentToRemove.Delete();
+
+            componentToRemove.Dispose();
+
+            Remove(componentToRemove);
+
         }
 
         /// <summary>
@@ -159,6 +156,75 @@ namespace InventorWrapper.Components
                 }
             }
         }
+
+        /// <summary>
+        /// Place component in assembly
+        /// </summary>
+        /// <param name="fileName">Path to source file to place</param>
+        /// <param name="options">Option include representaion and level of detail. Default options are provided in Default options class</param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        /// <returns></returns>
+        public InventorComponent PlaceComponentWithOptions(string fileName, 
+            List<InventorNameValueMapOptions> options,
+            double x = 0, 
+            double y = 0, 
+            double z = 0
+           )
+        {
+            TransientGeometry transientGeometry = InventorApplication.GetTransientGeometry();
+            Matrix matrix = transientGeometry.CreateMatrix();
+            NameValueMap objectNameMapOptions = InventorApplication.GetTransientObjects().CreateNameValueMap();
+            foreach (var option in options)
+            {
+                objectNameMapOptions.Add(option.Name, option.Value);
+            }
+
+            matrix.SetTranslation(transientGeometry.CreateVector(x, y, z));
+            var occurence = _adoc._adef.Occurrences.AddWithOptions(fileName, matrix, objectNameMapOptions);
+
+            var component = new InventorComponent(occurence);
+
+            Add(component);
+
+            Marshal.ReleaseComObject(transientGeometry);
+            Marshal.ReleaseComObject(matrix);
+            Marshal.ReleaseComObject(objectNameMapOptions);
+
+            return component;
+        }
+
+        /// <summary>
+        /// Places a component in the active assembly
+        /// </summary>
+        /// <param name="fileName">Path to source file to place</param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        /// <returns></returns>
+        public InventorComponent PlaceComponent(string fileName,
+            double x = 0,
+            double y = 0,
+            double z = 0
+           )
+        {
+            TransientGeometry transientGeometry = InventorApplication.GetTransientGeometry();
+            Matrix matrix = transientGeometry.CreateMatrix();
+
+            matrix.SetTranslation(transientGeometry.CreateVector(x, y, z));
+            var occurence = _adoc._adef.Occurrences.Add(fileName, matrix);
+
+            var component = new InventorComponent(occurence);
+
+            Add(component);
+
+            Marshal.ReleaseComObject(transientGeometry);
+            Marshal.ReleaseComObject(matrix);
+
+            return component;
+        }
+
 
         public void Dispose()
         {
