@@ -45,13 +45,17 @@ namespace InventorWrapper.Parameters
         {
             get
             {
-                if (UnitType == UnitTypes.Length)
+                if (_parameter.Value == null) return null;
+
+                var result = double.TryParse(_parameter.Value?.ToString(), out double tempValue);
+
+                if (UnitType == UnitTypes.Length && result)
                 {
-                    return UnitManager.UnitsFromInventor((double)_parameter.Value);
+                    return UnitManager.UnitsFromInventor(tempValue);
                 }
-                else if (UnitType == UnitTypes.Angular)
+                else if (UnitType == UnitTypes.Angular && result)
                 {
-                    return UnitManager.UnitsFromInventor((double)_parameter.Value, UnitTypes.Angular);
+                    return UnitManager.UnitsFromInventor(tempValue, UnitTypes.Angular);
                 }
 
                 return _parameter.Value;
