@@ -151,7 +151,9 @@ namespace InventorWrapper.Components
                 {
                     if (c.Definition.Type == ObjectTypeEnum.kAssemblyComponentDefinitionObject || c.Definition.Type == ObjectTypeEnum.kWeldmentComponentDefinitionObject)
                     {
-                        GetComponents(occurrences, recurse);
+                        var subOccurences = c.SubOccurrences as ComponentOccurrences;
+
+                        GetComponents(subOccurences, recurse);
                     }
                 }
             }

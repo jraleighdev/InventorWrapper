@@ -215,6 +215,15 @@ namespace InventorWrapper
         }
 
         /// <summary>
+        /// Opens the given document
+        /// </summary>
+        /// <param name="document"></param>
+        public static void Open(InventorDocument document)
+        {
+            _inventor.Documents.Open(document.FileName);
+        }
+
+        /// <summary>
         /// Adds a new inventor document 
         /// This will become the active document
         /// </summary>

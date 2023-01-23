@@ -369,6 +369,11 @@ namespace InventorWrapper.Documents
             _document.SelectSet.Clear();
         }
 
+        public void Activate()
+        {
+            _document.Activate();
+        }
+
         public virtual void Dispose()
         {
             if (_document != null)
