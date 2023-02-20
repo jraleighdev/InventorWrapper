@@ -117,7 +117,6 @@
     <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="IProps\InventorProperties.cs" />
     <Compile Include="IProps\IpropertyEnum.cs" />
-    <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
     <Compile Include="Parameters\InventorParameter.cs" />
     <Compile Include="Parameters\InventorParameters.cs" />
     <Compile Include="Patterns\InventorPattern.cs" />
@@ -133,7 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="InventorWrapper.nuspec" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

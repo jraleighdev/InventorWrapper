@@ -3,7 +3,6 @@ using InventorWrapper.Documents;
 using InventorWrapper.Drawings.Curves;
 using InventorWrapper.Drawings.DrawingSheet;
 using InventorWrapper.Drawings.Enums;
-using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
