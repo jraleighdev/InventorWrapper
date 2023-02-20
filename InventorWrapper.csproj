@@ -88,13 +88,19 @@
     <Compile Include="Drawings\DrawingSheet\InventorSheet.cs" />
     <Compile Include="Drawings\DrawingSheet\InventorTitleBlock.cs" />
     <Compile Include="Drawings\Enums\CurveTypes.cs" />
+    <Compile Include="Drawings\Enums\InventorDrawingViewStyle.cs" />
     <Compile Include="Drawings\Enums\InventorDimensionType.cs" />
+    <Compile Include="Drawings\Enums\InventorDrawingViewType.cs" />
+    <Compile Include="Drawings\Enums\InventorViewOrientaionType.cs" />
     <Compile Include="Drawings\Enums\PointType.cs" />
+    <Compile Include="Drawings\Enums\ProjectedViewDirection.cs" />
     <Compile Include="Drawings\Enums\ViewSide.cs" />
+    <Compile Include="Drawings\Helpers\DrawingViewPlacement.cs" />
     <Compile Include="Drawings\Interfaces\IlocationEntity.cs" />
     <Compile Include="Drawings\Interfaces\IMajorPoints.cs" />
     <Compile Include="Drawings\View\InventorView.cs" />
     <Compile Include="Drawings\Curves\Point.cs" />
+    <Compile Include="Enums\InventorObjectTypes.cs" />
     <Compile Include="Extensions\ComponentOccurenceExtensions.cs" />
     <Compile Include="Extensions\Curves\GeometryPointExtensions.cs" />
     <Compile Include="Features\FeatureTypes.cs" />
@@ -111,10 +117,14 @@
     <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="IProps\InventorProperties.cs" />
     <Compile Include="IProps\IpropertyEnum.cs" />
+    <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
     <Compile Include="Parameters\InventorParameter.cs" />
     <Compile Include="Parameters\InventorParameters.cs" />
     <Compile Include="Patterns\InventorPattern.cs" />
     <Compile Include="Patterns\InventorPatterns.cs" />
+    <Compile Include="Project\InventorDesignProject.cs" />
+    <Compile Include="Project\InventorDesignProjectManager.cs" />
+    <Compile Include="Project\InventorProjectPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Representation\InventorRepresentationManager.cs" />
   </ItemGroup>
@@ -123,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="InventorWrapper.nuspec" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -22,7 +22,7 @@ namespace InventorWrapper.Drawings
     {
         public DrawingView _view;
 
-        public Sheet _sheet;
+        protected Sheet _sheet => Parent._sheet;
 
         private InventorDocument _document;
 
@@ -61,15 +61,59 @@ namespace InventorWrapper.Drawings
         /// </summary>
         public double Bottom => _view.Top - _view.Height;
 
+        public string ActiveDesignViewRep => _view.ActiveDesignViewRepresentation;
+
+        public void SetDesignViewRepresentation(string value, bool associative)
+        {
+            _view.SetDesignViewRepresentation(value, associative);
+        }
+
+        public InventorDrawingViewType ViewType => (InventorDrawingViewType)_view.ViewType;
+
+        public bool Aligned
+        {
+            get => _view.Aligned;
+            set => _view.Aligned = value;
+        }
+
+        public bool IsProjected => ViewType == InventorDrawingViewType.ProjectedDrawing;
+
+        public bool IsDetail => ViewType == InventorDrawingViewType.DetailDrawing;
+
+        public bool IsSection => ViewType == InventorDrawingViewType.SectionDrawing;
+
+        public bool Associative => _view.DesignViewAssociative;
+
+        public bool ScaleFromBase
+        {
+            get => _view.ScaleFromBase;
+            set => _view.ScaleFromBase = value;
+        }
+
         /// <summary>
         /// Current scale of the view 
         /// </summary>
-        public double Scale => _view.Scale;
+        public double Scale
+        {
+            get => _view.Scale;
+            set
+            {
+                if (value <= 0)
+                {
+                    _view.Scale = .01;
+                }
+                else
+                {
+                    _view.Scale = value;
+
+                }
+            }
+        }
 
         public Point Center
         {
             get => new Point(_view.Center);
-            set => new Point(value.X, value.Y);
+            set => _view.Center = value.CreatePoint();
         }
 
         /// <summary>
@@ -78,13 +122,15 @@ namespace InventorWrapper.Drawings
         public Point Point
         {
             get => new Point(_view.Position);
-            set => new Point(value.X, value.Y);
+            set => _view.Position = value.CreatePoint();
         }
 
-        public InventorView(DrawingView view)
+        public InventorSheet Parent { get; private set; }
+
+        public InventorView(DrawingView view, InventorSheet parent)
         {
             _view = view;
-            _sheet = view.Parent;
+            Parent = parent;
         }
 
         /// <summary>

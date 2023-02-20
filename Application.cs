@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using InventorWrapper.Drawings.Curves;
+using InventorWrapper.Project;
 
 namespace InventorWrapper
 {
@@ -289,6 +290,28 @@ namespace InventorWrapper
 
         #endregion
 
+        #region Projects
+
+        private static InventorDesignProjectManager _designProject;
+
+        /// <summary>
+        /// Accces project manager
+        /// </summary>
+        public static InventorDesignProjectManager DesignProjectManager
+        {
+            get
+            {
+                if (_designProject == null)
+                {
+                    _designProject = new InventorDesignProjectManager(_inventor.DesignProjectManager);
+                }
+
+                return _designProject;
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// Release resources
         /// </summary>
@@ -298,6 +321,11 @@ namespace InventorWrapper
             {
                 Marshal.ReleaseComObject(_inventor);
                 Marshal.ReleaseComObject(_events);
+            }
+
+            if (_designProject != null)
+            {
+                _designProject.Dispose();
             }
         }
     }
