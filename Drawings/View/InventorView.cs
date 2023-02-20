@@ -6,10 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using InventorWrapper.Drawings.Dimensions;
 using InventorWrapper.Drawings.Dimensions.OrdinateDims;
 using InventorWrapper.Drawings.Enums;
@@ -171,12 +167,46 @@ namespace InventorWrapper.Drawings
         /// </summary>
         /// <param name="component"></param>
         /// <returns></returns>
-        public InventorDrawingCurves GetCurves(InventorComponent component = null)
+        public List<InventorDrawingCurve> GetCurves(InventorComponent component = null)
         {
-            return new InventorDrawingCurves(component != null ? 
-                     _view.DrawingCurves[component._component] : 
-                     _view.DrawingCurves, _sheet);
+            var curveEnum = component == null ? _view.DrawingCurves : _view.DrawingCurves[component._component];
+
+            var curves = new List<InventorDrawingCurve>();
+
+            foreach (DrawingCurve curve in curveEnum)
+            {
+                if (curve == null) continue;
+
+                curves.Add(new InventorDrawingCurve(curve, _sheet));
+            }
+
+            return curves;
         }
+
+        public List<InventorDrawingCurve> GetCurves(IEnumerable<InventorComponent> components)
+        {
+            if (components == null) return null;
+
+            var curves = new List<InventorDrawingCurve>();
+
+            foreach (var component in components)
+            {
+                if (component == null) continue;
+
+                var curveEnum = _view.DrawingCurves[component._component];
+
+                if (curveEnum == null || curveEnum.Count == 0) continue;
+
+                foreach (DrawingCurve c in curveEnum)
+                {
+                    if (c == null) continue;
+
+                    curves.Add(new InventorDrawingCurve(c, _sheet));
+                }
+            }
+
+            return curves;
+         }
 
         #region Dimensions
 
@@ -389,7 +419,7 @@ namespace InventorWrapper.Drawings
         /// <param name="extensionLines"></param>
         public void CreateCenterMarks(List<GeometryPoint> points, bool extensionLines = false)
         {
-            points.RemoveAll(point => point == null);
+            points.RemoveAll(point => point == null || point.PointType != PointType.CenterPoint);
 
             foreach (var p in points)
             {

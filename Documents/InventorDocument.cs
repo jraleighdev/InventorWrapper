@@ -184,11 +184,11 @@ namespace InventorWrapper.Documents
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception">If the document is not an assembly document will throw an error</exception>
-        public InventorAssemblyDocument GetAssemblyDocument()
+        public InventorAssemblyDocument GetAssemblyDocument(bool allChildren = false)
         {
             if (!IsAssemblyDoc) throw new Exception($"Document {Name} is not an assembly document");
 
-            return new InventorAssemblyDocument(_document);
+            return new InventorAssemblyDocument(_document, allChildren);
         }
 
         /// <summary>

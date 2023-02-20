@@ -23,11 +23,18 @@ namespace InventorWrapper.Components
 
         private List<InventorProxy> _proxies;
 
+        private List<InventorComponent> _occurencePath;
+
         /// <summary>
         /// Default attribute set when adding name
         /// to a face through the inventor ui.
         /// </summary>
         public const string iLogicEntityNameSet = "iLogicEntityNameSet";
+
+        /// <summary>
+        /// Steps down in the component hierachy to this component
+        /// </summary>
+        private ComponentOccurrencesEnumerator _paths;
 
         /// <summary>
         /// Interop reference for the component
@@ -126,9 +133,38 @@ namespace InventorWrapper.Components
             }
         }
 
+        public List<InventorComponent> OccurencePath
+        {
+            get
+            {
+                if (_occurencePath == null)
+                {
+                    _occurencePath = new List<InventorComponent>();
+
+                    foreach (ComponentOccurrence occ in _paths)
+                    {
+                        _occurencePath.Add(new InventorComponent(occ));
+                    }
+                }
+
+                return _occurencePath;
+            }
+        }
+
+        /// <summary>
+        /// List of names of the component occurences
+        /// </summary>
+        public List<string> OccurenceList => OccurencePath.Select(x => x.Name).ToList();
+
+        /// <summary>
+        /// Command delimited string of the occurence liste
+        /// </summary>
+        public string PathList => string.Join(",", OccurenceList);
+
         public InventorComponent(ComponentOccurrence component)
         {
             _component = component;
+            _paths = component.OccurrencePath;
         }
 
         public void Delete()
@@ -141,6 +177,16 @@ namespace InventorWrapper.Components
             if (_component != null)
             {
                 Marshal.ReleaseComObject(_component);
+            }
+
+            if (_paths != null)
+            {
+                Marshal.ReleaseComObject(_paths);
+            }
+
+            if (_occurencePath != null )
+            {
+                _occurencePath.ForEach(x => x.Dispose());
             }
         }
 

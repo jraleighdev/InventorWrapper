@@ -39,22 +39,7 @@ namespace InventorWrapper.Drawings.Curves
         /// Type of curve
         /// </summary>
         public CurveTypes CurveType { get; }
-        
-        /// <summary>
-        /// Name of the occurence that owns the curve
-        /// </summary>
-        public string OccurenceName { get; set; }
-
-        /// <summary>
-        /// Path to the curve
-        /// </summary>
-        public string PathString { get; set; }
-
-        /// <summary>
-        /// Path to the curve in a list
-        /// </summary>
-        public List<string> OccurencePath { get; set; }
-
+       
         /// <summary>
         /// Start point of the curve returns null on circular curves
         /// </summary>
@@ -138,18 +123,7 @@ namespace InventorWrapper.Drawings.Curves
             // return the temp list 
             return tempList;
         }
-        
-        /// <summary>
-        /// TODO Implement
-        /// </summary>
-        /// <param name="curveSegment"></param>
-        public InventorDrawingCurve(DrawingCurveSegment curveSegment)
-        {
-            _curve = curveSegment.Parent;
-
-            FindOccurence(_curve.ModelGeometry);
-        }
-
+       
         /// <summary>
         /// Constructs the inventor curve and adds reference to the source sheet.
         /// </summary>
@@ -161,31 +135,6 @@ namespace InventorWrapper.Drawings.Curves
             _sheet = sheet;
             _rangeBox = _curve.Evaluator2D.RangeBox;
             CurveType = (CurveTypes)_curve.CurveType;
-        }
-
-        /// <summary>
-        /// Finds an occurence in the curve list
-        /// </summary>
-        /// <param name="value"></param>
-        private void FindOccurence(dynamic value)
-        {
-            if (found) return;
-
-            if (value == null) return;
-
-            if (value is ComponentOccurrence occurrence)
-            {
-                OccurenceName = occurrence.Name;
-                OccurencePath = occurrence.GetOccurencePath();
-                PathString = occurrence.GetOccurencePathString();
-                found = true;
-                return;
-            }
-
-            while (!found)
-            {
-                FindOccurence(value?.Parent);
-            }
         }
 
         /// <summary>

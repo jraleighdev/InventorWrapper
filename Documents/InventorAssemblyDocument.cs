@@ -48,14 +48,16 @@ namespace InventorWrapper.Documents
         /// <summary>
         /// When components are retreived should all be retreived
         /// </summary>
-        public bool AllChildComponents = false;
+        public bool AllChildComponents { get; set; }
 
         /// <summary>
         /// Casts the source document as an assembly document, assembly component definition, and setup the features
         /// </summary>
         /// <param name="document"></param>
-        public InventorAssemblyDocument(Document document) : base(document)
+        public InventorAssemblyDocument(Document document, bool allChildren = false) : base(document)
         {
+            AllChildComponents = allChildren;
+
             _adoc = document as AssemblyDocument;
 
             _adef = _adoc.ComponentDefinition;

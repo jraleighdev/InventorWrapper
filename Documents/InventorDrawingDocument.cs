@@ -71,47 +71,5 @@ namespace InventorWrapper.Documents
 
         public InventorSheet ActiveSheet => new InventorSheet(_drawing.ActiveSheet);
 
-        /// <summary>
-        /// Get the selected curve from the active sheet
-        /// </summary>
-        /// <returns></returns>
-        public InventorDrawingCurve SelectedCurve()
-        {
-            if (SelectedItem() is DrawingCurveSegment drawingCurveSegment)
-            {
-                return new InventorDrawingCurve(drawingCurveSegment);
-            }
-            else if (SelectedItem() is DrawingCurve drawingCurve)
-            {
-                return new InventorDrawingCurve(drawingCurve, _drawing.ActiveSheet);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets all the selected curves
-        /// </summary>
-        /// <returns></returns>
-        public List<InventorDrawingCurve> SelectedCurves()
-        {
-            var seletedItems = SelectedItems();
-
-            var tempList = new List<InventorDrawingCurve>();
-
-            foreach (var s in seletedItems)
-            {
-                if (s is DrawingCurveSegment drawingCurveSegment)
-                {
-                    tempList.Add(new InventorDrawingCurve(drawingCurveSegment));
-                }
-                else if (s is DrawingCurve drawingCurve)
-                {
-                    tempList.Add(new InventorDrawingCurve(drawingCurve, _drawing.ActiveSheet));
-                }
-            }
-
-            return tempList;
-        }
     }
 }
