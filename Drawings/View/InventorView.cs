@@ -425,8 +425,37 @@ namespace InventorWrapper.Drawings
             {
                 var c = _sheet.Centermarks.Add(p.CreateIntent());
                 c.ExtensionLinesVisible = extensionLines;
-            }
-            
+            }   
+        }
+
+        #endregion
+
+        #region Leaders
+
+        /// <summary>
+        /// Creates center line direction is based on center
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="text"></param>
+        /// <param name="offset"></param>
+        /// <param name="optionalXCenter">Optional x center the leader will face direction that the point is in relation to center</param>
+        /// <param name="optionalYCenter">Optional y center the leader will face direction that the point is in relation to center</param>
+        public void AddLeader(GeometryPoint point, string text, double offset = .25, Point optionalXCenter = null, Point optionalYCenter = null)
+        {
+            var centerX = optionalXCenter != null ? optionalXCenter : Center;
+            var centerY = optionalYCenter != null ? optionalYCenter : Center;
+
+            var x = point.X > centerX.X ? point.X + offset : point.X - offset;
+            var y = point.Y > centerY.Y ? point.Y + offset : point.Y - offset;
+
+            var secondPoint = new Point(x, y);
+
+            var collection = InventorApplication.CreateObjectCollection();
+
+            collection.Add(point.CreatePoint());
+            collection.Add(secondPoint.CreatePoint());
+
+            _sheet.DrawingNotes.LeaderNotes.Add(collection, text);
         }
 
         #endregion

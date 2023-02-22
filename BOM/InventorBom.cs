@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Web;
 using Inventor;
 
 namespace InventorWrapper.BOM
@@ -36,6 +37,15 @@ namespace InventorWrapper.BOM
 
                 return _viewNames;
             }
+        }
+
+        /// <summary>
+        /// Delimter for bill.
+        /// </summary>
+        public string StructuredViewDelimiter
+        {
+            get => _bom.StructuredViewDelimiter;
+            set => _bom.StructuredViewDelimiter = value;
         }
 
         /// <summary>

@@ -84,17 +84,28 @@
     <Compile Include="Drawings\Dimensions\OrdinateDims\InventorDiameterDimension.cs" />
     <Compile Include="Drawings\Dimensions\OrdinateDims\InventorOrdinateDimensionSet.cs" />
     <Compile Include="Drawings\Dimensions\OrdinateDims\InventorOrdinateDimension.cs" />
+    <Compile Include="Drawings\DrawingSheet\InventorBorder.cs" />
+    <Compile Include="Drawings\DrawingSheet\InventorPartsList.cs" />
     <Compile Include="Drawings\DrawingSheet\InventorSheet.cs" />
+    <Compile Include="Drawings\DrawingSheet\InventorSketchSymbol.cs" />
+    <Compile Include="Drawings\DrawingSheet\InventorTable.cs" />
     <Compile Include="Drawings\DrawingSheet\InventorTitleBlock.cs" />
     <Compile Include="Drawings\Enums\CurveTypes.cs" />
     <Compile Include="Drawings\Enums\InventorDrawingViewStyle.cs" />
     <Compile Include="Drawings\Enums\InventorDimensionType.cs" />
     <Compile Include="Drawings\Enums\InventorDrawingViewType.cs" />
+    <Compile Include="Drawings\Enums\InventorHeaderPlacementEnum.cs" />
+    <Compile Include="Drawings\Enums\InventorHorizontalTextAlignment.cs" />
+    <Compile Include="Drawings\Enums\InventorLineSpacingEnum.cs" />
+    <Compile Include="Drawings\Enums\InventorPartsListLevelEnum.cs" />
+    <Compile Include="Drawings\Enums\InventorTableDirectionEnum.cs" />
     <Compile Include="Drawings\Enums\InventorViewOrientaionType.cs" />
     <Compile Include="Drawings\Enums\PointType.cs" />
     <Compile Include="Drawings\Enums\ProjectedViewDirection.cs" />
+    <Compile Include="Drawings\Enums\ShiftDirection.cs" />
     <Compile Include="Drawings\Enums\ViewSide.cs" />
     <Compile Include="Drawings\Helpers\DrawingViewPlacement.cs" />
+    <Compile Include="Drawings\Helpers\DTO\InventorTableDto.cs" />
     <Compile Include="Drawings\Interfaces\IlocationEntity.cs" />
     <Compile Include="Drawings\Interfaces\IMajorPoints.cs" />
     <Compile Include="Drawings\View\InventorView.cs" />
@@ -116,6 +127,7 @@
     <Compile Include="Geometry\InventorWorkPlanes.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="IProps\InventorProperties.cs" />
+    <Compile Include="IProps\InventorPropertyTypeEnum.cs" />
     <Compile Include="IProps\IpropertyEnum.cs" />
     <Compile Include="Parameters\InventorParameter.cs" />
     <Compile Include="Parameters\InventorParameters.cs" />
@@ -132,6 +144,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="InventorWrapper.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Drawings\Annotations\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

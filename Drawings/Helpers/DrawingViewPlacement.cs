@@ -76,6 +76,19 @@ namespace InventorWrapper.Drawings.Helpers
             LocateViewsAlongYAxis();
         }
 
+        public void ShiftViews(ShiftDirection shiftDirection)
+        {
+            switch (shiftDirection)
+            {
+                case ShiftDirection.Horizontal:
+                    LocateViewsAlongXAxis();
+                    break;
+                case ShiftDirection.Vertical:
+                    LocateViewsAlongYAxis();
+                    break;
+            }
+        }
+
         public void LocateViewsAlongXAxis()
         {
             var viewData = GetData();

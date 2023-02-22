@@ -153,7 +153,7 @@ namespace InventorWrapper
                 }
                 catch (Exception exception)
                 {
-                    throw new Exception("Unable to get or start inventor");
+                    throw new Exception("Unable to get or start inventor", exception);
                 }
             }
         }
@@ -219,9 +219,9 @@ namespace InventorWrapper
         /// Opens the given document
         /// </summary>
         /// <param name="document"></param>
-        public static void Open(InventorDocument document)
+        public static InventorDocument Open(InventorDocument document, bool visible = true)
         {
-            _inventor.Documents.Open(document.FileName);
+            return new InventorDocument(_inventor.Documents.Open(document.FileName, visible));
         }
 
         /// <summary>
