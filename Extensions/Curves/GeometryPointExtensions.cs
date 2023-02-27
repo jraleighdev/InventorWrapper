@@ -146,6 +146,30 @@ namespace InventorWrapper.Extensions.Curves
         public static GeometryPoint MinXMinYPoint(this IEnumerable<GeometryPoint> points) =>
             points.MinXPoints().MinYPoint();
 
+        public static List<GeometryPoint> RemoveDuplicates(this IEnumerable<GeometryPoint> points)
+        {
+            var tempList = new List<GeometryPoint>();
+            
+            foreach (var point in points)
+            {
+                if (tempList.Count == 0)
+                {
+                    tempList.Add(point);
+                }
+                else
+                {
+                    var matching = tempList.Any(p => Math.Abs(point.X - p.X) < 0.005 && (Math.Abs(point.Y - p.Y) < 0.005));
+
+                    if (!matching)
+                    {
+                        tempList.Add(point);
+                    }
+                }
+            }
+
+            return tempList;
+        }
+        
         public static List<GeometryPoint> RemoveDuplicateX(this IEnumerable<GeometryPoint> points)
         {
             var tempList = new List<GeometryPoint>();

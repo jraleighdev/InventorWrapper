@@ -64,6 +64,8 @@ namespace InventorWrapper.Drawings
             _view.SetDesignViewRepresentation(value, associative);
         }
 
+        public string ActiveLevelOfDetail => _view.ActiveLevelOfDetailRepresentation;
+        
         public InventorDrawingViewType ViewType => (InventorDrawingViewType)_view.ViewType;
 
         public bool Aligned
@@ -460,6 +462,8 @@ namespace InventorWrapper.Drawings
 
         #endregion
 
+        public void Delete() => _view.Delete();
+        
         public void Dispose()
         {
             if (_view != null)

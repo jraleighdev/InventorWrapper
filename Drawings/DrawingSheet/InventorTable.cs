@@ -4,7 +4,10 @@ using InventorWrapper.Enums;
 using InventorWrapper.IProps;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
+using InventorWrapper.Drawings.Curves;
+using InventorWrapper.Drawings.DrawingSheet.Style;
 
 namespace InventorWrapper.Drawings.DrawingSheet
 {
@@ -12,12 +15,96 @@ namespace InventorWrapper.Drawings.DrawingSheet
     {
         public CustomTable _table;
 
+        private List<InventorColumn> _columns;
+
+        private List<InventorRow> _rows;
+
+        private InventorTableStyle _style;
+
         public InventorSheet Parent { get; private set; }
 
         public InventorTable(CustomTable table, InventorSheet parent)
         {
             _table = table;
             Parent = parent;    
+        }
+
+        public int ColumnsCount => _table.Columns.Count;
+
+        public int RowsCount => _table.Rows.Count;
+
+        /// <summary>
+        /// Add a column to the table
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="targetIndex"></param>
+        /// <param name="insertBefore"></param>
+        /// <param name="width"></param>
+        /// <returns></returns>
+        public InventorColumn AddColumn(string title, int targetIndex = 0, bool insertBefore = true, double? width = null)
+        {
+            var column = new InventorColumn(_table.Columns.Add(title, targetIndex, insertBefore, width));
+
+            Columns.Add(column);
+
+            return column;
+        }
+
+        /// <summary>
+        /// Add row to the table
+        /// </summary>
+        /// <param name="targetIndex"></param>
+        /// <param name="insertBefore"></param>
+        /// <param name="contents">array strings must match the number of columns in the table</param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public InventorRow AddRow(int targetIndex = 0, bool insertBefore = true, IEnumerable<string> contents = null, double? height = null)
+        {
+            var row = new InventorRow(_table.Rows.Add(targetIndex, insertBefore, contents?.ToArray(), height));
+
+            Rows.Add(row);
+
+            return row;
+        }
+             
+        public List<InventorColumn> Columns
+        {
+            get
+            {
+                bool refresh = _columns == null || ColumnsCount != _columns.Count;
+
+                if (refresh)
+                {
+                    _columns = new List<InventorColumn>();
+
+                    foreach (Column col in _table.Columns)
+                    {
+                        _columns.Add(new InventorColumn(col));
+                    }
+                }
+
+                return _columns;
+            }
+        }
+
+        public List<InventorRow> Rows
+        {
+            get
+            {
+                bool refresh = _rows == null || RowsCount != _rows.Count;
+
+                if (refresh)
+                {
+                    _rows = new List<InventorRow>();
+
+                    foreach (Row row in _table.Rows)
+                    {
+                        _rows.Add(new InventorRow(row));
+                    }
+                }
+
+                return _rows;
+            }
         }
 
         public InventorObjectTypes Type => (InventorObjectTypes)_table.Type;
@@ -81,6 +168,19 @@ namespace InventorWrapper.Drawings.DrawingSheet
             set => _table.ShowTitle = value;
         }
 
+        public InventorTableStyle Style
+        {
+            get
+            {
+                if (_style == null)
+                {
+                    _style = new InventorTableStyle(_table.Style);
+                }
+
+                return _style;
+            }
+        }
+
         public InventorTableDirectionEnum TableDirection
         {
             get => (InventorTableDirectionEnum)_table.TableDirection;
@@ -104,8 +204,28 @@ namespace InventorWrapper.Drawings.DrawingSheet
             _table.Sort(primaryColumn, primaryAsc, secColumn, secAsc, terColumn, terAsc);
         }
 
+        /// <summary>
+        /// Moves to table position to place right top point at current position.
+        /// </summary>
+        public void AdjustPositionToRightTopPoint()
+        {
+            Position = new Curves.Point(Position.X - Width, Position.Y);
+        }
+
         public void Dispose()
         {
+            _style?.Dispose();
+
+            if (_columns != null && _columns.Count > 0)
+            {
+                _columns.ForEach(x => x.Dispose());
+            }
+
+            if (_rows != null && _rows.Count > 0)
+            {
+                _rows.ForEach(x => x.Dispose());
+            }
+
             if (_table != null)
             {
                 Marshal.ReleaseComObject(_table);
@@ -214,15 +334,15 @@ namespace InventorWrapper.Drawings.DrawingSheet
 
         public void Dispose()
         {
+            if (Cells != null && Cells.Count > 0)
+            {
+                Cells.ForEach(x => x.Dispose());
+            }
+
             if (_row != null)
             {
                 Marshal.ReleaseComObject(_row);
                 _row = null;
-            }
-
-            if (Cells != null && Cells.Count > 0)
-            {
-                Cells.ForEach(x => x.Dispose());
             }
         }
     }

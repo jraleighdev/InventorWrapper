@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InventorWrapper.Drawings.Enums;
 
 namespace InventorWrapper.Documents
 {
@@ -55,15 +56,15 @@ namespace InventorWrapper.Documents
         /// <param name="addTitleBlock">Optional parameter to add the title block if true title block name must be set</param>
         /// <param name="titleBlockName">Optional parameter name of the title block to add</param>
         /// <returns></returns>
-        public InventorSheet AddSheet(DrawingSheetSizeEnum drawingSheetSize, bool addDefaultBoder = true, bool addTitleBlock = false, string titleBlockName = "")
+        public InventorSheet AddSheet(InventorDrawingSheetSizeEnum drawingSheetSize = InventorDrawingSheetSizeEnum.kDefaultDrawingSheetSize, bool addDefaultBorder = true, bool addTitleBlock = false, string titleBlockName = "")
         {
-            var sheet = new InventorSheet(_drawing.Sheets.Add(drawingSheetSize));
+            var sheet = new InventorSheet(_drawing.Sheets.Add((DrawingSheetSizeEnum)drawingSheetSize));
 
-            if (addDefaultBoder) sheet.AddBorder();
+            if (addDefaultBorder) sheet.AddBorder();
 
             if (addTitleBlock)
             {
-                
+                sheet.AddTitleBlock(titleBlockName);
             }
 
             return sheet;

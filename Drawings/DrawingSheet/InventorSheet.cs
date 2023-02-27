@@ -3,11 +3,13 @@ using InventorWrapper.Documents;
 using InventorWrapper.Drawings.Curves;
 using InventorWrapper.Drawings.DrawingSheet;
 using InventorWrapper.Drawings.Enums;
+using InventorWrapper.Drawings.Helpers.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting;
 
 namespace InventorWrapper.Drawings
 {
@@ -54,6 +56,8 @@ namespace InventorWrapper.Drawings
         {
             get
             {
+                if (_sheet.TitleBlock == null) return null;
+                
                 if (_titleBlock == null)
                 {
                     _titleBlock = new InventorTitleBlock(_sheet.TitleBlock);
@@ -61,6 +65,11 @@ namespace InventorWrapper.Drawings
 
                 return _titleBlock;
             }
+        }
+
+        public InventorTitleBlock AddTitleBlock(string name, InventorTitleBlockLocationEnum location = InventorTitleBlockLocationEnum.kBottomRightPosition, IEnumerable<string> prompts = null)
+        {
+            return new InventorTitleBlock(_sheet.AddTitleBlock(name, (TitleBlockLocationEnum)location, prompts?.ToArray()));
         }
 
         public InventorSheet(Sheet sheet)
@@ -120,6 +129,19 @@ namespace InventorWrapper.Drawings
             return AddProjectedView(parentView, new Curves.Point(x, y), drawingViewStyle);
         }
 
+        public InventorDetailDrawingView AddDetailViewByCenter(InventorView view, Curves.Point location, bool circularFence, Curves.Point center, double radius, Curves.Point attachment = null, InventorDrawingViewStyle viewStyle = InventorDrawingViewStyle.FromBaseDrawing)
+        {
+            return new InventorDetailDrawingView(_sheet.DrawingViews.AddDetailView(view._view, location.CreatePoint(), (DrawingViewStyleEnum)viewStyle,
+                circularFence, center.CreatePoint(), radius), this);
+        }
+        
+        public InventorDetailDrawingView AddDetailViewByExtremes(InventorView view, Curves.Point location, bool circularFence, Curves.Point pointOne, Curves.Point pointTwo, Curves.Point attachment = null, InventorDrawingViewStyle viewStyle = InventorDrawingViewStyle.FromBaseDrawing)
+        {
+            return new InventorDetailDrawingView(_sheet.DrawingViews.AddDetailView(view._view, location.CreatePoint(), (DrawingViewStyleEnum)viewStyle,
+                circularFence, pointOne.CreatePoint(), pointTwo.CreatePoint()), this);
+        }
+
+
         private void GetViews()
         {
             Views.Clear();
@@ -138,7 +160,7 @@ namespace InventorWrapper.Drawings
         {
             get
             {
-                bool refresh = _partsList == null ? true : _partsList.Count != _sheet.PartsLists.Count;
+                bool refresh = _partsList == null || _partsList.Count != _sheet.PartsLists.Count;
 
                 if (refresh && _sheet.PartsLists.Count > 0)
                 {
@@ -148,11 +170,9 @@ namespace InventorWrapper.Drawings
                     {
                         _partsList.Add(new InventorPartsList(partList, this));
                     }
-
-                    return _partsList;
                 }
 
-                return null;
+                return _partsList;
             }
         }
 
@@ -160,7 +180,7 @@ namespace InventorWrapper.Drawings
         {
             get
             {
-                bool refresh = _tables == null ? true : _tables.Count != _sheet.CustomTables.Count;
+                bool refresh = _tables == null || _tables.Count != _sheet.CustomTables.Count;
 
                 if (refresh && _sheet.CustomTables.Count > 0)
                 {
@@ -171,10 +191,9 @@ namespace InventorWrapper.Drawings
                         _tables.Add(new InventorTable(table, this));
                     }
 
-                    return _tables;
                 }
 
-                return null;
+                return _tables;
             }
         }
 
@@ -251,27 +270,77 @@ namespace InventorWrapper.Drawings
             return null;
         } 
 
-        public InventorTable AddTable(string title, Curves.Point point, ref IEnumerable<string> titles, IEnumerable<string> contents, IEnumerable<double> columnWidths)
+        /// <summary>
+        /// Creates an inventor custom table
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="point"></param>
+        /// <param name="columnCount"></param>
+        /// <param name="rowCount"></param>
+        /// <param name="titles">Titles of each column must be equal to column count or an error will occur</param>
+        /// <param name="contents">Content is passed in row wise must match the number of cells in the table or an error will occur</param>
+        /// <param name="columnWidths"></param>
+        /// <returns></returns>
+        public InventorTable AddTable(string title, Curves.Point point, int columnCount, int rowCount, IEnumerable<string> titles, IEnumerable<string> contents = null, IEnumerable<double> columnWidths = null, IEnumerable<double> rowHeights = null)
         {
             var refTitles = titles.ToArray();
 
-            CustomTable table = _sheet.CustomTables.Add(title, point.CreatePoint(), titles.Count(), title.Count() / contents.Count(), ref refTitles, contents, columnWidths);
+            CustomTable table = _sheet.CustomTables.Add(title, point.CreatePoint(), columnCount, rowCount, ref refTitles, contents?.ToArray(), columnWidths?.ToArray(), rowHeights?.ToArray());
 
             return new InventorTable(table, this);
+        }
+
+        /// <summary>
+        /// Creates an inventor table using a dto
+        /// </summary>
+        /// <param name="inventorTableDto"></param>
+        /// <param name="tableLocation"></param>
+        /// <returns></returns>
+        public InventorTable AddTable(InventorTableDto inventorTableDto, Curves.Point tableLocation)
+        {
+            var titles = inventorTableDto.Columns.Select(x => x.Title).ToArray();
+
+            var data = new List<Tuple<string, int>>();
+
+            foreach (var col in inventorTableDto.Columns) 
+            {
+                foreach (var row in col.RowData)
+                {
+                    data.Add(new Tuple<string, int>(row, col.RowData.IndexOf(row)));
+                }
+            }
+
+            var dataAr = data.OrderBy(x => x.Item2);
+
+            var rowData = dataAr.Select(x => x.Item1).ToArray();
+
+            var columnWidths = inventorTableDto.Columns.Select(x => x.Width).ToArray();
+
+            var table = new InventorTable(_sheet.CustomTables.Add(inventorTableDto.Title, tableLocation.CreatePoint(), inventorTableDto.ColumnQty, inventorTableDto.RowQty, titles, rowData, columnWidths), this);
+
+            for (var i = 0; i <= table.Columns.Count - 1; i++)
+            {
+                var dto = inventorTableDto.Columns[i];
+
+                var column = table.Columns[i];
+
+                column.TitleHorizontalJustification = dto.HeaderTextAlignment;
+
+                column.ValueHorizontalJustification = dto.DataTextAlignment;
+            }
+
+            return table;
         }
 
         #endregion
 
         public void Dispose()
         {
+            Border?.Dispose();
+
             if (_sheet == null)
             {
                 Marshal.ReleaseComObject(_sheet);
-            }
-
-            if (Border != null)
-            {
-                Border.Dispose();
             }
         }
     }

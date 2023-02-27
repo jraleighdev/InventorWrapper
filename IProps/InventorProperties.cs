@@ -55,6 +55,20 @@ namespace InventorWrapper.IProps
         public bool PropertyExists(string propertyName) => CustomProperties.Count > 0 &&
             CustomProperties.Any(prop => prop.Item1.ToUpper() == propertyName.ToUpper());
 
+        public string GetInternalName(IpropertyEnum ipropertyEnum, string customName = "")
+        {
+            var property = ipropertyEnum == IpropertyEnum.Custom ? 
+                PropertyExists(customName) ? _propertySets[ipropertyEnum.GetCategory()][customName] : null :
+                _propertySets[ipropertyEnum.GetCategory()][ipropertyEnum.GetDescription()];
+
+            if (property == null)
+            {
+                return "";
+            }
+
+            return _propertySets[ipropertyEnum.GetCategory()].InternalName;
+        }
+        
         /// <summary>
         /// Gets the given iproperty if the custom is selected give the name
         /// </summary>
@@ -73,6 +87,20 @@ namespace InventorWrapper.IProps
             }
 
             return property.Value as string;
+        }
+        
+        public int GetPropertyId(IpropertyEnum ipropertyEnum, string customName = "")
+        {
+            var property = ipropertyEnum == IpropertyEnum.Custom ? 
+                PropertyExists(customName) ? _propertySets[ipropertyEnum.GetCategory()][customName] : null :
+                _propertySets[ipropertyEnum.GetCategory()][ipropertyEnum.GetDescription()];
+
+            if (property == null)
+            {
+                return 0;
+            }
+
+            return property.PropId;
         }
 
         /// <summary>

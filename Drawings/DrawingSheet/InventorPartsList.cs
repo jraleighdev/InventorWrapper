@@ -16,6 +16,10 @@ namespace InventorWrapper.Drawings.DrawingSheet
     {
         public PartsList _partsList;
 
+        private List<InventorPartsListColumn> _columns;
+
+        private List<InventorPartsListRow> _rows;
+
         public InventorSheet Parent { get; private set; }
 
         public InventorPartsList(PartsList partsList, InventorSheet parent)
@@ -49,12 +53,13 @@ namespace InventorWrapper.Drawings.DrawingSheet
         /// <param name="iproperty"></param>
         /// <param name="target"></param>
         /// <param name="insertBefore"></param>
-        /// <param name="customPropertyName"></param>
+        /// <param name="propertyIdentifier"></param>
         /// <param name="width"></param>
         /// <param name="index"></param>
+        /// <param name="internalName">Internal name of the property set we are trying to add</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public InventorPartsListColumn AddColumn(InventorPropertyTypeEnum propType, IpropertyEnum iproperty, int target, bool insertBefore, string customPropertyName = "", double width = .5, int index = 0)
+        public InventorPartsListColumn AddColumn(InventorPropertyTypeEnum propType, IpropertyEnum iproperty, int target, bool insertBefore, string propertyIdentifier = "", double width = .5, int index = 0, string internalName = "")
         {
             if (target > ColumnsCount)
             {
@@ -65,15 +70,28 @@ namespace InventorWrapper.Drawings.DrawingSheet
 
             if (propType == InventorPropertyTypeEnum.FileProperty)
             {
-                // TODO look up making method to retreive internal property names
+                try
+                {
+                    var propId = int.TryParse(propertyIdentifier, out var value);
+
+                    if (propId)
+                    {
+                        col = _partsList.PartsListColumns.Add(PropertyTypeEnum.kFileProperty, internalName,
+                            value, target, insertBefore);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Parent.Errors.Add(ex);
+                }
             }
             else if (propType == InventorPropertyTypeEnum.CustomProperty)
             {
-                if (!Columns.Any(x => x.Title == customPropertyName))
+                if (!Columns.Any(x => x.Title == propertyIdentifier))
                 {
                     try
                     {
-                        col = _partsList.PartsListColumns.Add((PropertyTypeEnum)propType, "", customPropertyName, target, insertBefore);
+                        col = _partsList.PartsListColumns.Add((PropertyTypeEnum)propType, "", propertyIdentifier, target, insertBefore);
                     }
                     catch (Exception ex)
                     {
@@ -95,9 +113,13 @@ namespace InventorWrapper.Drawings.DrawingSheet
 
             if (col != null)
             {
-                col.Width= width;
+                col.Width = width;
 
-                return new InventorPartsListColumn(col);
+                var column = new InventorPartsListColumn(col);
+
+                Columns.Add(column);
+
+                return column;
             }
 
             return null;
@@ -107,17 +129,19 @@ namespace InventorWrapper.Drawings.DrawingSheet
         {
             get
             {
-                var columns = new List<InventorPartsListColumn>();
+                bool refresh = _columns == null || ColumnsCount != _columns.Count;
 
-                if (ColumnsCount > 0)
+                if (refresh)
                 {
-                    for (var i = 1; i <= ColumnsCount; i++)
+                    _columns = new List<InventorPartsListColumn>();
+
+                    foreach (PartsListColumn col in _partsList.PartsListColumns)
                     {
-                        columns.Add(new InventorPartsListColumn(_partsList.PartsListColumns[i]));
+                        _columns.Add(new InventorPartsListColumn(col));
                     }
                 }
 
-                return columns;
+                return _columns;
             }
         }
 
@@ -125,17 +149,19 @@ namespace InventorWrapper.Drawings.DrawingSheet
         {
             get
             {
-                var rows = new List<InventorPartsListRow>();
+                bool refresh = _rows == null || RowsCount != _rows.Count;
 
-                if (RowsCount > 0)
+                if (refresh)
                 {
-                    for (var i = 1; i <= ColumnsCount; i++)
+                    _rows = new List<InventorPartsListRow>();
+
+                    foreach (PartsListRow row in _partsList.PartsListRows)
                     {
-                        rows.Add(new InventorPartsListRow(_partsList.PartsListRows[i]));
+                        _rows.Add(new InventorPartsListRow(row));
                     }
                 }
 
-                return rows;
+                return _rows;
             }
         }
 
@@ -168,20 +194,20 @@ namespace InventorWrapper.Drawings.DrawingSheet
 
         public void Dispose()
         {
+            if (_columns != null && _columns.Count > 0)
+            {
+                _columns.ForEach(x => x.Dispose());
+            }
+
+            if (_rows != null && _rows.Count > 0)
+            {
+                _rows.ForEach(x => x.Dispose());
+            }
+
             if (_partsList != null )
             {
                 Marshal.ReleaseComObject(_partsList);
                 _partsList = null;
-            }
-
-            if (Columns != null && Columns.Count > 0)
-            {
-                Columns.ForEach(x => x.Dispose());
-            }
-
-            if (Rows != null && Rows.Count > 0)
-            {
-                Rows.ForEach(x => x.Dispose());
             }
         }
     }
@@ -300,15 +326,15 @@ namespace InventorWrapper.Drawings.DrawingSheet
 
         public void Dispose()
         {
+            if (Cells != null && Cells.Count > 0)
+            {
+                Cells.ForEach(x => x.Dispose());
+            }
+
             if (_partsListRow != null )
             {
                 Marshal.ReleaseComObject(_partsListRow);
                 _partsListRow = null;
-            }
-
-            if (Cells != null && Cells.Count > 0)
-            {
-                Cells.ForEach(x => x.Dispose());
             }
         }
     }
