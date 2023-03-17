@@ -53,11 +53,6 @@ namespace InventorWrapper.Project
         {
             if (_designProjectManager != null)
             {
-                Marshal.ReleaseComObject(_designProjectManager);
-                _designProjectManager = null;
-
-                ActiveProject?.Dispose();
-
                 try
                 {
                     if (_projects != null && _projects.Count > 0)
@@ -67,11 +62,19 @@ namespace InventorWrapper.Project
                             project.Dispose();
                         }
                     }
+
+                    ActiveProject?.Dispose();
                 }
                 catch (Exception ex)
                 {
                     Errors.Add(ex);
                 }
+
+
+                Marshal.ReleaseComObject(_designProjectManager);
+                _designProjectManager = null;
+
+                
             }
         }
     }
