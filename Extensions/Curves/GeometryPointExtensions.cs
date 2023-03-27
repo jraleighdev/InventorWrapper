@@ -146,7 +146,7 @@ namespace InventorWrapper.Extensions.Curves
         public static GeometryPoint MinXMinYPoint(this IEnumerable<GeometryPoint> points) =>
             points.MinXPoints().MinYPoint();
 
-        public static List<GeometryPoint> RemoveDuplicates(this IEnumerable<GeometryPoint> points)
+        public static List<GeometryPoint> RemoveDuplicates(this IEnumerable<GeometryPoint> points, double variance = 0.005)
         {
             var tempList = new List<GeometryPoint>();
             
@@ -158,7 +158,7 @@ namespace InventorWrapper.Extensions.Curves
                 }
                 else
                 {
-                    var matching = tempList.Any(p => Math.Abs(point.X - p.X) < 0.005 && (Math.Abs(point.Y - p.Y) < 0.005));
+                    var matching = tempList.Any(p => Math.Abs(point.X - p.X) < 0.005 && (Math.Abs(point.Y - p.Y) < variance));
 
                     if (!matching)
                     {
@@ -170,7 +170,7 @@ namespace InventorWrapper.Extensions.Curves
             return tempList;
         }
         
-        public static List<GeometryPoint> RemoveDuplicateX(this IEnumerable<GeometryPoint> points)
+        public static List<GeometryPoint> RemoveDuplicateX(this IEnumerable<GeometryPoint> points, double variance = 0.005)
         {
             var tempList = new List<GeometryPoint>();
 
@@ -182,7 +182,7 @@ namespace InventorWrapper.Extensions.Curves
                 }
                 else
                 {
-                    var matchingX = tempList.Any(p => Math.Abs(point.X - p.X) < 0.005);
+                    var matchingX = tempList.Any(p => Math.Abs(point.X - p.X) < variance);
                     
                     if (!matchingX)
                     {
@@ -193,8 +193,18 @@ namespace InventorWrapper.Extensions.Curves
 
             return tempList;
         }
+
+        public static bool HasSameX(this GeometryPoint point, GeometryPoint pointToCompare, double variance = 0.005)
+        {
+            return Math.Abs(point.X - pointToCompare.X) < variance;
+        }
+
+        public static bool HasSameY(this GeometryPoint point, GeometryPoint pointToCompare, double variance = 0.005)
+        {
+            return Math.Abs(point.Y - pointToCompare.Y) < variance;
+        }
         
-        public static List<GeometryPoint> RemoveDuplicateY(this IEnumerable<GeometryPoint> points)
+        public static List<GeometryPoint> RemoveDuplicateY(this IEnumerable<GeometryPoint> points, double variance = 0.005)
         {
             var tempList = new List<GeometryPoint>();
 
@@ -206,7 +216,7 @@ namespace InventorWrapper.Extensions.Curves
                 }
                 else
                 {
-                    var matchingY = tempList.Any(p => Math.Abs(point.Y - p.Y) < 0.005);
+                    var matchingY = tempList.Any(p => Math.Abs(point.Y - p.Y) < variance);
                     
                     if (!matchingY)
                     {

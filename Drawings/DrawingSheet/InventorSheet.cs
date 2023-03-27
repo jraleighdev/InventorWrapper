@@ -10,6 +10,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting;
+using InventorWrapper.Drawings.Annotations;
+using InventorWrapper.Drawings.DrawingSheet.Style;
 
 namespace InventorWrapper.Drawings
 {
@@ -332,6 +334,64 @@ namespace InventorWrapper.Drawings
             return table;
         }
 
+        #endregion
+
+        #region Notes
+
+        public List<InventorGeneralNote> GeneralNotes
+        {
+            get
+            {
+                var notes = new List<InventorGeneralNote>();
+
+                foreach (GeneralNote generalNote in _sheet.DrawingNotes.GeneralNotes)
+                {
+                    notes.Add(new InventorGeneralNote(generalNote));
+                }
+
+                return notes;
+            }
+        }
+        
+        public void DeleteGeneralNotes()
+        {
+            for (var i = _sheet.DrawingNotes.GeneralNotes.Count; i > 0; i--)
+            {
+                _sheet.DrawingNotes.GeneralNotes[i].Delete();
+            }
+        }
+
+        public InventorGeneralNote AddGeneralNote(Curves.Point point, string text, InventorTextStyle textStyle = null)
+        {
+            var note = new InventorGeneralNote(_sheet.DrawingNotes.GeneralNotes.AddFitted(point.CreatePoint(), text, textStyle));
+            
+            return note;
+        }
+
+        public void DeleteLeaderNotes()
+        {
+            for (var i = _sheet.DrawingNotes.LeaderNotes.Count; i > 0; i--)
+            {
+                _sheet.DrawingNotes.LeaderNotes[i].Delete();
+            }
+        }
+        
+        public InventorLeaderNote AddLeaderNote(List<Curves.Point> points, string text)
+        {
+            var objCol = InventorApplication.CreateObjectCollection();
+
+            foreach (var point in points)
+            {
+                objCol.Add(point);
+            }
+
+            var note = new InventorLeaderNote(_sheet.DrawingNotes.LeaderNotes.Add(objCol, text));
+
+            Marshal.ReleaseComObject(objCol);
+
+            return note;
+        }
+        
         #endregion
 
         public void Dispose()

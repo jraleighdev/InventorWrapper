@@ -1,4 +1,5 @@
 ﻿using Inventor;
+using InventorWrapper.Drawings.Annotations;
 using InventorWrapper.Drawings.Enums;
 
 namespace InventorWrapper.Drawings.Curves
@@ -6,15 +7,26 @@ namespace InventorWrapper.Drawings.Curves
     public class GeometryPoint : Point
     {
         public InventorDrawingCurve Curve { get; private set; }
-        
+
+        public InventorCenterLine CenterLine { get; private set; }
+       
         public PointType PointType { get; private set; }
+
+        public PointSource PointSource { get; private set; }
 
         /// <summary>
         /// Create geometry intent to apply dimensions
         /// </summary>
         public GeometryIntent CreateIntent()
         {
-            return Curve._sheet.CreateGeometryIntent(Curve._curve, CreatePoint());
+            switch (PointSource)
+            {
+                case PointSource.Centerline:
+                    return CenterLine._sheet.CreateGeometryIntent(CenterLine._centerLine, CreatePoint());
+                case PointSource.Curve:
+                default:
+                    return Curve._sheet.CreateGeometryIntent(Curve._curve, CreatePoint());
+            }
         }
 
         /// <summary>
@@ -28,6 +40,7 @@ namespace InventorWrapper.Drawings.Curves
         {
             Curve = curve;
             PointType = pointType;
+            PointSource = PointSource.Curve;
         }
 
         /// <summary>
@@ -40,8 +53,21 @@ namespace InventorWrapper.Drawings.Curves
         {
             Curve = curve;
             PointType = pointType;
+            PointSource = PointSource.Curve;
         }
-        
-        
+
+        public GeometryPoint(Point2d point, InventorCenterLine centerLine, PointType pointType) : base(point)
+        {
+            CenterLine = centerLine;
+            PointType = pointType;
+            PointSource = PointSource.Centerline;
+        }
+
+    }
+
+    public enum PointSource
+    {
+        Curve = 1,
+        Centerline = 2
     }
 }

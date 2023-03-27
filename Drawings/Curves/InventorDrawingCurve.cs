@@ -1,10 +1,12 @@
 ﻿using Inventor;
+using InventorWrapper.Components;
 using InventorWrapper.Drawings.Enums;
 using InventorWrapper.Drawings.Interfaces;
 using InventorWrapper.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +25,7 @@ namespace InventorWrapper.Drawings.Curves
         /// <summary>
         /// Refrence to the sheet for creating geometry intent
         /// </summary>
-        public  Sheet _sheet;
+        public Sheet _sheet;
 
         /// <summary>
         /// If the curve was found
@@ -39,6 +41,18 @@ namespace InventorWrapper.Drawings.Curves
         /// Type of curve
         /// </summary>
         public CurveTypes CurveType { get; }
+
+        public GeometryIntent CreateIntent()
+        {
+            return _sheet.CreateGeometryIntent(_curve);
+        }
+
+        /// <summary>
+        /// Component the curve is pulled from.
+        /// Not all curves will have a component.
+        /// Important to null check
+        /// </summary>
+        public InventorComponent Component { get; set; }
        
         /// <summary>
         /// Start point of the curve returns null on circular curves
@@ -129,12 +143,13 @@ namespace InventorWrapper.Drawings.Curves
         /// </summary>
         /// <param name="curve"></param>
         /// <param name="sheet"></param>
-        public InventorDrawingCurve(DrawingCurve curve, Sheet sheet)
+        public InventorDrawingCurve(DrawingCurve curve, Sheet sheet, InventorComponent component = null)
         {
             _curve = curve;
             _sheet = sheet;
             _rangeBox = _curve.Evaluator2D.RangeBox;
             CurveType = (CurveTypes)_curve.CurveType;
+            Component = component;
         }
 
         /// <summary>
@@ -149,7 +164,17 @@ namespace InventorWrapper.Drawings.Curves
         
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (_curve != null)
+            {
+                if (_rangeBox != null)
+                {
+                    Marshal.ReleaseComObject(_rangeBox);
+                    _rangeBox = null;
+                }
+
+                Marshal.ReleaseComObject(_curve);
+                _curve = null;
+            }
         }
     }
 }

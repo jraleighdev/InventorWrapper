@@ -24,5 +24,10 @@ namespace InventorWrapper.Drawings.Curves
         {
             return InventorApplication._inventor.TransientGeometry.CreatePoint2d(X, Y);
         }
+        
+        public static Point MidPoint(Point pointOne, Point pointTwo)
+        {
+            return new Point((pointOne.X + pointTwo.X) / 2, (pointOne.Y + pointTwo.Y) / 2);
+        }
     }
 }

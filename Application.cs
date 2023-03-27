@@ -216,6 +216,49 @@ namespace InventorWrapper
         }
 
         /// <summary>
+        /// Simplified way to open with level of detail and design view rep
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="levelOfDetail"></param>
+        /// <param name="designViewRep"></param>
+        /// <param name="visible"></param>
+        /// <returns></returns>
+        public static InventorDocument OpenWithSimpleOptions(string name, string levelOfDetail, string designViewRep = "", bool visible = true)
+        {
+            var nvm =_inventor.TransientObjects.CreateNameValueMap();
+            
+            if (!string.IsNullOrEmpty(levelOfDetail)) nvm.Add("LevelOfDetailRepresentation", levelOfDetail);
+            if (!string.IsNullOrEmpty(designViewRep)) nvm.Add("DesignViewRepresentation", designViewRep);
+
+            return new InventorDocument(_inventor.Documents.OpenWithOptions(name, nvm, visible));
+        }
+        
+        /// <summary>
+        /// Standard way of opening with options
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="nameValueMap">Name value map has numerous options review inventor api docs for all possibilties</param>
+        /// <param name="visible"></param>
+        /// <returns></returns>
+        public static InventorDocument OpenOptions(string name, List<Tuple<string, object>> nameValueMap, bool visible = true)
+        {
+            if (nameValueMap == null || nameValueMap.Count == 0)
+            {
+                throw new Exception("Must pass in options if no options are required use open");
+            }
+            
+            var nvm =_inventor.TransientObjects.CreateNameValueMap();
+
+            foreach (var nameValue in nameValueMap)
+            {
+                nvm.Add(nameValue.Item1, nameValue.Item2);
+            }
+            
+            return new InventorDocument(_inventor.Documents.OpenWithOptions(name, nvm, visible));
+        }
+        
+
+        /// <summary>
         /// Opens the given document
         /// </summary>
         /// <param name="document"></param>

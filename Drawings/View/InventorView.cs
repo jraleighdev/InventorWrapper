@@ -11,6 +11,7 @@ using InventorWrapper.Drawings.Dimensions.OrdinateDims;
 using InventorWrapper.Drawings.Enums;
 using InventorWrapper.Extensions.Curves;
 using Point = InventorWrapper.Drawings.Curves.Point;
+using InventorWrapper.Drawings.Annotations;
 
 namespace InventorWrapper.Drawings
 {
@@ -179,7 +180,7 @@ namespace InventorWrapper.Drawings
             {
                 if (curve == null) continue;
 
-                curves.Add(new InventorDrawingCurve(curve, _sheet));
+                curves.Add(new InventorDrawingCurve(curve, _sheet, component));
             }
 
             return curves;
@@ -203,7 +204,7 @@ namespace InventorWrapper.Drawings
                 {
                     if (c == null) continue;
 
-                    curves.Add(new InventorDrawingCurve(c, _sheet));
+                    curves.Add(new InventorDrawingCurve(c, _sheet, component));
                 }
             }
 
@@ -212,6 +213,38 @@ namespace InventorWrapper.Drawings
 
         #region Dimensions
 
+        /// <summary>
+        /// Adds general dimension to a drawing
+        /// </summary>
+        /// <param name="point1"></param>
+        /// <param name="point2"></param>
+        /// <param name="dimensionType"></param>
+        /// <param name="dimTextLocation"></param>
+        /// <param name="text"></param>
+        public InventorLinearGeneralDim AddGeneralDimension(GeometryPoint point1, GeometryPoint point2, InventorDimensionType dimensionType, Curves.Point dimTextLocation, string text = "")
+        {
+            try
+            {
+                var generalDimension = _sheet.DrawingDimensions.GeneralDimensions.AddLinear(dimTextLocation.CreatePoint(),
+                    point1.CreateIntent(), point2.CreateIntent(),
+                    (DimensionTypeEnum)dimensionType);
+            
+                generalDimension.CenterText();
+
+                if (!string.IsNullOrEmpty(text))
+                {
+                    generalDimension.HideValue = true;
+                    generalDimension.Text.FormattedText = text;
+                }
+
+                return new InventorLinearGeneralDim(generalDimension);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Could not add general dimension", e);
+            }
+        }
+        
         /// <summary>
         /// Adds general dimension to a drawing
         /// </summary>
@@ -335,7 +368,7 @@ namespace InventorWrapper.Drawings
         /// <param name="pointOne"></param>
         /// <param name="pointTwo"></param>
         /// <exception cref="Exception"></exception>
-        public void CreateCenterLine(GeometryPoint pointOne, GeometryPoint pointTwo)
+        public InventorCenterLine CreateCenterLine(GeometryPoint pointOne, GeometryPoint pointTwo)
         {
             if (pointOne == null || pointTwo == null)
             {
@@ -344,22 +377,28 @@ namespace InventorWrapper.Drawings
             
             var centerEntities = InventorApplication.CreateObjectCollection(new List<GeometryPoint> { pointOne, pointTwo});
 
-            _sheet.Centerlines.Add(centerEntities);
-
-            Marshal.ReleaseComObject(centerEntities);
+            return new InventorCenterLine(_sheet.Centerlines.Add(centerEntities), _sheet);
         }
 
         /// <summary>
         /// Creates center marks for the given points
         /// </summary>
         /// <param name="points"></param>
-        public void CreateCenterLine(List<GeometryPoint> points)
+        public InventorCenterLine CreateCenterLine(List<GeometryPoint> points)
         {
             var centerEntities = InventorApplication.CreateObjectCollection(points);
 
-            _sheet.Centerlines.Add(centerEntities);
+            return new InventorCenterLine(_sheet.Centerlines.Add(centerEntities), _sheet);
+        }
 
-            Marshal.ReleaseComObject(centerEntities);
+        public InventorCenterLine CreateCenterLine(InventorDrawingCurve curveOne, InventorDrawingCurve curveTwo)
+        {
+            if (curveOne == null || curveTwo == null)
+            {
+                throw new Exception("One or bot of the given curves are null");
+            }
+
+            return new InventorCenterLine(_sheet.Centerlines.AddBisector(curveOne.CreateIntent(), curveTwo.CreateIntent()), _sheet);
         }
 
         /// <summary>
@@ -370,9 +409,11 @@ namespace InventorWrapper.Drawings
         /// <param name="vertical">Create vertical center lines between points that are on the same y axis</param>
         /// <param name="horizontal">Create horizontal center lines between points that are on the same x axis</param>
         /// <param name="centerMarks">Create center marks on the given points</param>
-        public void CreateCenterLines(List<GeometryPoint> points, bool vertical = true, bool horizontal = true,
+        public List<InventorCenterLine> CreateCenterLines(List<GeometryPoint> points, bool vertical = true, bool horizontal = true,
             bool centerMarks = true)
         {
+            var tempList = new List<InventorCenterLine>();
+
             var xPoints = new List<GeometryPoint>();
             var yPoints = new List<GeometryPoint>();
 
@@ -392,7 +433,7 @@ namespace InventorWrapper.Drawings
                     
                     if (verticalPoints.Count < 2) continue;
                     
-                    CreateCenterLine(verticalPoints);
+                    tempList.Add(CreateCenterLine(verticalPoints));
                 }
             }
 
@@ -406,11 +447,13 @@ namespace InventorWrapper.Drawings
                     
                     if (horizontalPoints.Count < 2) continue;
                     
-                    CreateCenterLine(horizontalPoints);
+                    tempList.Add(CreateCenterLine(horizontalPoints));
                 }
             }
             
             if (centerMarks) CreateCenterMarks(points);
+
+            return tempList;
         }
 
         /// <summary>
@@ -444,19 +487,19 @@ namespace InventorWrapper.Drawings
         /// <param name="optionalYCenter">Optional y center the leader will face direction that the point is in relation to center</param>
         public void AddLeader(GeometryPoint point, string text, double offset = .25, Point optionalXCenter = null, Point optionalYCenter = null)
         {
-            var centerX = optionalXCenter != null ? optionalXCenter : Center;
-            var centerY = optionalYCenter != null ? optionalYCenter : Center;
+            var centerX = optionalXCenter ?? Center;
+            var centerY = optionalYCenter ?? Center;
 
             var x = point.X > centerX.X ? point.X + offset : point.X - offset;
             var y = point.Y > centerY.Y ? point.Y + offset : point.Y - offset;
 
-            var secondPoint = new Point(x, y);
+            var textPoint = new Point(x, y);
 
             var collection = InventorApplication.CreateObjectCollection();
 
-            collection.Add(point.CreatePoint());
-            collection.Add(secondPoint.CreatePoint());
-
+            collection.Add(textPoint.CreatePoint());
+            collection.Add(point.CreateIntent());
+            
             _sheet.DrawingNotes.LeaderNotes.Add(collection, text);
         }
 

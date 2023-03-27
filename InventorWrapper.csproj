@@ -76,6 +76,11 @@
     <Compile Include="Documents\InventorDocumentType.cs" />
     <Compile Include="Documents\InventorDrawingDocument.cs" />
     <Compile Include="Documents\InventorPartDocument.cs" />
+    <Compile Include="Drawings\Annotations\InventorCenterLine.cs" />
+    <Compile Include="Drawings\Annotations\InventorDrawingNote.cs" />
+    <Compile Include="Drawings\Annotations\InventorGeneralNote.cs" />
+    <Compile Include="Drawings\Annotations\InventorLeader.cs" />
+    <Compile Include="Drawings\Annotations\InventorLeaderNote.cs" />
     <Compile Include="Drawings\Curves\GeometryPoint.cs" />
     <Compile Include="Drawings\Curves\InventorDrawingCurve.cs" />
     <Compile Include="Drawings\Dimensions\IDimension.cs" />
@@ -93,6 +98,7 @@
     <Compile Include="Drawings\DrawingSheet\Style\InventorColor.cs" />
     <Compile Include="Drawings\DrawingSheet\Style\InventorTableStyle.cs" />
     <Compile Include="Drawings\Enums\CurveTypes.cs" />
+    <Compile Include="Drawings\Enums\InventorCenterLineType.cs" />
     <Compile Include="Drawings\Enums\InventorDrawingSheetSizeEnum.cs" />
     <Compile Include="Drawings\Enums\InventorDrawingViewStyle.cs" />
     <Compile Include="Drawings\Enums\InventorDimensionType.cs" />
@@ -158,8 +164,6 @@
   <ItemGroup>
     <None Include="InventorWrapper.nuspec" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Drawings\Annotations\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
