@@ -169,6 +169,41 @@ namespace InventorWrapper.Documents
             }
         }
 
+        private List<InventorHoleFeature> _holeFeatures;
+        
+        public List<InventorHoleFeature> HoleFeatures
+        {
+            get
+            {
+                if (_holeFeatures == null)
+                {
+                    _holeFeatures = new List<InventorHoleFeature>();
+                    
+                    if (IsPartDoc)
+                    {
+                        PartDocument pdoc = _document as PartDocument;
+
+                        foreach (HoleFeature p in pdoc.ComponentDefinition.Features.HoleFeatures)
+                        {
+                            _holeFeatures.Add(new InventorHoleFeature(p, pdoc.ComponentDefinition.Features.HoleFeatures));
+                        }
+                    }
+                    else if (IsAssemblyDoc)
+                    {
+                        AssemblyDocument adoc = _document as AssemblyDocument;
+
+                        foreach (HoleFeature p in adoc.ComponentDefinition.Features.HoleFeatures)
+                        {
+                            _holeFeatures.Add(new InventorHoleFeature(p, adoc.ComponentDefinition.Features.HoleFeatures));
+                        }
+                    }
+                }
+
+                return _holeFeatures;
+            }    
+        }
+       
+
         /// <summary>
         /// Stores the interop reference and initializes the id
         /// </summary>

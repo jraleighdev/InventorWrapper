@@ -14,4 +14,12 @@ namespace InventorWrapper.Features
         Face = 3,
         Edge = 4,
     }
+
+    public enum HoleTypes
+    {
+        CounterBore = 21507,
+        CounterSink = 21506,
+        Drilled = 21505,
+        SpotFace = 21508
+    }
 }

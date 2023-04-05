@@ -70,6 +70,7 @@
     <Compile Include="Constraints\InventorConstraintType.cs" />
     <Compile Include="CopyTools\ReferenceDto.cs" />
     <Compile Include="CopyTools\CopyHelpers.cs" />
+    <Compile Include="Data\HoleSizes.cs" />
     <Compile Include="Documents\DocumentHelper.cs" />
     <Compile Include="Documents\InventorAssemblyDocument.cs" />
     <Compile Include="Documents\InventorDocument.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Features\FeatureTypes.cs" />
     <Compile Include="Features\InventorFace.cs" />
     <Compile Include="Features\InventorFeature.cs" />
+    <Compile Include="Features\InventorHoleFeature.cs" />
     <Compile Include="General\AngularUnits.cs" />
     <Compile Include="General\DefaultOptions.cs" />
     <Compile Include="General\UnitManager.cs" />
