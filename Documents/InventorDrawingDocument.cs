@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InventorWrapper.Components.Options;
+using InventorWrapper.Constants;
 using InventorWrapper.Drawings.Enums;
 
 namespace InventorWrapper.Documents
@@ -71,6 +73,66 @@ namespace InventorWrapper.Documents
         }
 
         public InventorSheet ActiveSheet => new InventorSheet(_drawing.ActiveSheet);
+
+        public void ExportPdfWithOptions(string location, IEnumerable<InventorNameValueMapOptions> options)
+        {
+            TranslatorAddIn pdfAddin = (TranslatorAddIn)InventorApplication._inventor.ApplicationAddIns.ItemById[InventorApplicationAddInIds.PDF];
+
+            var context = InventorApplication._inventor.TransientObjects.CreateTranslationContext();
+
+            context.Type = IOMechanismEnum.kFileBrowseIOMechanism;
+
+            var nameValueMap = InventorApplication._inventor.TransientObjects.CreateNameValueMap();
+
+            var dataMedium = InventorApplication._inventor.TransientObjects.CreateDataMedium();
+
+            if (pdfAddin.HasSaveCopyAsOptions[_document, context, nameValueMap])
+            {
+                foreach (var option in options)
+                {
+                    nameValueMap.Value[option.Name] = option.Value;
+                }
+            }
+
+            dataMedium.FileName = System.IO.Path.ChangeExtension(location, ".pdf");
+            
+            pdfAddin.SaveCopyAs(_document, context, nameValueMap, dataMedium);
+            
+        }
+
+        /// <summary>
+        /// Export pdf with some default settings
+        /// </summary>
+        /// Default setttings applied with this config
+        /// nameValueMap.Value["All_Color_AS_BLACK"] = 0;
+        /// nameValueMap.Value["Remove_Line_Weights"] = 0;
+        /// nameValueMap.Value["Vector_Resolution"] = 4800;
+        /// nameValueMap.Value["Sheet_Range"] = PrintRangeEnum.kPrintAllSheets;
+        /// <param name="location"></param>
+        public void ExportPdfDefaultSettings(string location)
+        {
+            TranslatorAddIn pdfAddin = (TranslatorAddIn)InventorApplication._inventor.ApplicationAddIns.ItemById[InventorApplicationAddInIds.PDF];
+
+            var context = InventorApplication._inventor.TransientObjects.CreateTranslationContext();
+
+            context.Type = IOMechanismEnum.kFileBrowseIOMechanism;
+
+            var nameValueMap = InventorApplication._inventor.TransientObjects.CreateNameValueMap();
+
+            var dataMedium = InventorApplication._inventor.TransientObjects.CreateDataMedium();
+
+            if (pdfAddin.HasSaveCopyAsOptions[_document, context, nameValueMap])
+            {
+                nameValueMap.Value["All_Color_AS_BLACK"] = 0;
+                nameValueMap.Value["Remove_Line_Weights"] = 0;
+                nameValueMap.Value["Vector_Resolution"] = 4800;
+                nameValueMap.Value["Sheet_Range"] = PrintRangeEnum.kPrintAllSheets;
+            }
+
+            dataMedium.FileName = System.IO.Path.ChangeExtension(location, ".pdf");
+            
+            pdfAddin.SaveCopyAs(_document, context, nameValueMap, dataMedium);
+        }
 
     }
 }

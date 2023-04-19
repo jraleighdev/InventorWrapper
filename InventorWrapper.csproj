@@ -66,6 +66,7 @@
     <Compile Include="Components\InventorComponent.cs" />
     <Compile Include="Components\InventorComponents.cs" />
     <Compile Include="Components\Options\InventorNameValueMapOptions.cs" />
+    <Compile Include="Constants\InventorApplicationAddInIds.cs" />
     <Compile Include="Constraints\InventorConstraints.cs" />
     <Compile Include="Constraints\InventorConstraintType.cs" />
     <Compile Include="CopyTools\ReferenceDto.cs" />
@@ -166,6 +167,5 @@
   <ItemGroup>
     <None Include="InventorWrapper.nuspec" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
