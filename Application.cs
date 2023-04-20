@@ -283,6 +283,24 @@ namespace InventorWrapper
         /// </summary>
         public static void CloseAll() => _inventor.Documents.CloseAll();
 
+        public static bool SilentOperation
+        {
+            get => _inventor.SilentOperation;
+            set => _inventor.SilentOperation = value;
+        }
+
+        public static bool ScreenUpdating
+        {
+            get => _inventor.ScreenUpdating;
+            set => _inventor.ScreenUpdating = value;
+        }
+
+        public static bool UserInteractionDisabled
+        {
+            get => _inventor.UserInterfaceManager.UserInteractionDisabled;
+            set => _inventor.UserInterfaceManager.UserInteractionDisabled = value;
+        }
+
         #endregion
 
         #region Geometry
