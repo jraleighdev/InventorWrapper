@@ -123,7 +123,7 @@ namespace InventorWrapper.Drawings
                     y = parentView.Bottom - offset;
                     break;
                 case ProjectedViewDirection.Right:
-                    x = parentView.Right + x;
+                    x = parentView.Right + offset;
                     y = parentView.Center.Y;
                     break;
             }
