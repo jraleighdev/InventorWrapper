@@ -31,6 +31,21 @@ namespace InventorWrapper.Components
         }
 
         /// <summary>
+        /// Tries to set the level of detail of every component in the assembly
+        /// </summary>
+        /// <param name="levelOfDetail"></param>
+        public void SetLevelOfDetailToAllComponents(string levelOfDetail)
+        {
+            foreach (var component in this) 
+            { 
+                if (component.Document.RepresentationManager.GetLevelDetails().Any(x => x.Equals(levelOfDetail)))
+                {
+                    component.LevelOfDetail = levelOfDetail;
+                }
+            }
+        }
+
+        /// <summary>
         /// Sets the status of component in the assembly by reference
         /// </summary>
         /// <param name="name"></param>

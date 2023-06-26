@@ -82,6 +82,30 @@ namespace InventorWrapper.Components
         }
 
         /// <summary>
+        /// Level of detail of the component
+        /// </summary>
+        public string LevelOfDetail
+        {
+            get => _component.ActiveLevelOfDetailRepresentation;
+            set
+            {
+                _component.SetLevelOfDetailRepresentation(value);
+            }
+        }
+
+        /// <summary>
+        /// Level of detail of the component
+        /// </summary>
+        public string DesignViewRep
+        {
+            get => _component.ActiveDesignViewRepresentation;
+            set
+            {
+                _component.SetDesignViewRepresentation(value);
+            }
+        }
+
+        /// <summary>
         /// Gets and sets the suppression status of the component
         /// </summary>
         public bool Suppressed
