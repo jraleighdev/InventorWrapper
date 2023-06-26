@@ -24,6 +24,11 @@ namespace InventorWrapper.Drawings
         private InventorDocument _document;
 
         /// <summary>
+        /// List of exceptions gathered during curve collection.
+        /// </summary>
+        public List<Exception> Exceptions { get; set; }
+
+        /// <summary>
         /// View Name
         /// </summary>
         public string Name => _view.Name;
@@ -63,6 +68,11 @@ namespace InventorWrapper.Drawings
         public void SetDesignViewRepresentation(string value, bool associative)
         {
             _view.SetDesignViewRepresentation(value, associative);
+        }
+
+        public void SetLevelOfDetail(string value)
+        {
+            _view.ActiveLevelOfDetailRepresentation = value;
         }
 
         public string ActiveLevelOfDetail => _view.ActiveLevelOfDetailRepresentation;
@@ -130,6 +140,7 @@ namespace InventorWrapper.Drawings
         {
             _view = view;
             Parent = parent;
+            Exceptions = new List<Exception>();
         }
 
         /// <summary>
@@ -194,17 +205,24 @@ namespace InventorWrapper.Drawings
 
             foreach (var component in components)
             {
-                if (component == null) continue;
+                if (component == null || component.Suppressed) continue;
 
-                var curveEnum = _view.DrawingCurves[component._component];
-
-                if (curveEnum == null || curveEnum.Count == 0) continue;
-
-                foreach (DrawingCurve c in curveEnum)
+                try
                 {
-                    if (c == null) continue;
+                    var curveEnum = _view.DrawingCurves[component._component];
 
-                    curves.Add(new InventorDrawingCurve(c, _sheet, component));
+                    if (curveEnum == null || curveEnum.Count == 0) continue;
+
+                    foreach (DrawingCurve c in curveEnum)
+                    {
+                        if (c == null) continue;
+
+                        curves.Add(new InventorDrawingCurve(c, _sheet, component));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Exceptions.Add(ex);
                 }
             }
 
