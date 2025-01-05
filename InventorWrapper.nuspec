@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>InventorWrapper</id>
-    <version>1.0.17</version>
+    <version>1.0.20</version>
     <title>InventorWrapper</title>
     <authors>jraleigdev</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/jraleighdev/InventorWrapper</projectUrl>
     <description>Dotnet wrapper for autodesk inventor</description>
     <releaseNotes>Added support to retreive immediate children of a document.</releaseNotes>
-    <copyright>Copyright 2021</copyright>
+    <copyright>Copyright 2023</copyright>
     <tags>Autodesk Inventor</tags>
   </metadata>
 </package>

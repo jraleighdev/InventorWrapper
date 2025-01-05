@@ -37,7 +37,9 @@ namespace InventorWrapper.Components
         public void SetLevelOfDetailToAllComponents(string levelOfDetail)
         {
             foreach (var component in this) 
-            { 
+            {
+                if (component.Suppressed) continue;
+
                 if (component.Document.RepresentationManager.GetLevelDetails().Any(x => x.Equals(levelOfDetail)))
                 {
                     component.LevelOfDetail = levelOfDetail;
@@ -160,7 +162,11 @@ namespace InventorWrapper.Components
         {
             foreach (ComponentOccurrence c in occurrences)
             {
+                var component = new InventorComponent(c);
+
                 Add(new InventorComponent(c));
+
+                if (component.Suppressed) continue;
 
                 if (recurse)
                 {
